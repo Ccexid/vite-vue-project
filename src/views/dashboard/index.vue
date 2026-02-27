@@ -14,10 +14,10 @@
   const filteredList = computed(() => {
     const query = searchQuery.value.trim().toLowerCase();
     if (!query) return options.value;
-    
-    return options.value.filter((item) => 
-      item.title.toLowerCase().includes(query) || 
-      item.description?.toLowerCase().includes(query)
+
+    return options.value.filter(
+      (item) =>
+        item.title.toLowerCase().includes(query) || item.description?.toLowerCase().includes(query),
     );
   });
 
@@ -41,16 +41,17 @@
 <template>
   <div class="dashboard-container">
     <h1>Hello Dashboard</h1>
-    <SearchBox 
-      :options="filteredList" 
-      @search="handleSearch" 
+    <SearchBox
+      :options="filteredList"
+      @search="handleSearch"
     />
+    <AppBtn>默认按钮</AppBtn>
     <RouterLink to="/404">Go to 404</RouterLink>
   </div>
 </template>
 
 <style lang="less" scoped>
-.dashboard-container {
-  padding: 20px;
-}
+  .dashboard-container {
+    padding: 20px;
+  }
 </style>

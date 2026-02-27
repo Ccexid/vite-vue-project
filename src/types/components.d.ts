@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AppBtn: typeof import('./../components/app-btn/index.vue')['default']
     IEpArrowRight: typeof import('~icons/ep/arrow-right')['default']
     IEpCircleClose: typeof import('~icons/ep/circle-close')['default']
     IEpDocument: typeof import('~icons/ep/document')['default']
