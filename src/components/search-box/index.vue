@@ -1,10 +1,14 @@
 <script lang="ts" setup>
   import { debounce } from 'lodash-es';
   import { gsap } from 'gsap';
+  import { RecycleScroller } from 'vue-virtual-scroller';
+  import type { SearchItem } from '@/types/search-box';
+
   const isModalOpen = ref(false);
   const dialogRef = ref<HTMLDivElement | null>(null);
   const maskRef = ref<HTMLDivElement | null>(null);
   const inputRef = ref<HTMLInputElement | null>(null);
+  const scrollerRef = ref();
   let activeTimeline: gsap.core.Timeline | null = null;
 
   // 统一动画配置
@@ -14,8 +18,47 @@
     easeOut: 'power2.in', // 关闭：线性加速
     startScale: 0.9, // 缩放范围从 0.9 到 1（比例小一点更显精致）
   };
+  /**
+   * 每个列表项的动画逻辑
+   * @param el 元素 DOM
+   * @param index 元素在列表中的原始索引
+   */
+  const animateItemIn = (el: HTMLElement | null, index: number) => {
+    if (!el) return;
+
+    // 1. 立即清理，但使用 auto 模式减少计算开销
+    gsap.killTweensOf(el);
+
+    // 2. 优化延迟算法
+    // 滚动时 index 很大，(index % 10) 仍然有效，但我们可以限制它只在首屏生效
+    const isInitial = index < 10;
+    const staggerDelay = isInitial ? index * 0.05 : 0;
+
+    // 3. 执行轻量化动画
+    gsap.fromTo(
+      el,
+      {
+        x: -20, // 减小位移距离，减少卡顿感
+        opacity: 0,
+      },
+      {
+        x: 0,
+        opacity: 1,
+        duration: 0.3, // 缩短持续时间
+        delay: staggerDelay,
+        ease: 'sine.out', // 使用更平滑的曲线
+        force3D: true, // 强制硬件加速
+        clearProps: 'transform,opacity', // 动画结束彻底清理，减轻浏览器负担
+        overwrite: 'auto',
+      },
+    );
+  };
 
   const props = defineProps({
+    options: {
+      type: Array as PropType<SearchItem[]>,
+      default: () => [],
+    },
     placeholder: {
       type: String,
       default: '搜索',
@@ -94,6 +137,9 @@
    */
   const closeModal = () => {
     if (activeTimeline) activeTimeline.kill();
+
+    emit('search', '');
+
     activeTimeline = gsap.timeline({
       onComplete: () => {
         isModalOpen.value = false;
@@ -137,6 +183,24 @@
       document.removeEventListener('keydown', handleKeyDownWithESC);
     }
   });
+
+  /**
+   * 监听搜索结果 options 的变化
+   * 当用户输入关键词导致列表更新时，自动重置滚动条到顶部
+   */
+  watch(
+    () => props.options,
+    () => {
+      // 确保在 DOM 更新后执行滚动重置
+      nextTick(() => {
+        if (scrollerRef.value) {
+          // scrollToPosition(0) 会将滚动条拉回到最上方
+          scrollerRef.value.scrollToPosition(0);
+        }
+      });
+    },
+    { deep: false }, // 搜索结果通常是替换整个数组，不需要深监听
+  );
   /**
    * 组件卸载时，移除事件监听和动画
    */
@@ -194,7 +258,46 @@
                 <div class="search-modal-input-key">ESC</div>
               </div>
             </div>
-            <div class="search-results">搜索到 0 个结果</div>
+            <div class="search-results-container">
+              <RecycleScroller
+                ref="scrollerRef"
+                v-if="options.length > 0"
+                class="scroller"
+                :items="options"
+                :item-size="54"
+                key-field="id"
+                :buffer="200"
+                v-slot="{ item, index }"
+              >
+                <div
+                  :key="item.id"
+                  class="item-anim-wrapper"
+                  :style="{ opacity: 0 }"
+                  @vue:mounted="
+                    (vnode: { el: HTMLElement }) => animateItemIn(vnode.el as HTMLElement, index)
+                  "
+                >
+                  <div class="result-item">
+                    <div class="item-icon"><i-ep-document /></div>
+                    <div class="item-info">
+                      <div class="item-title">{{ item.title }}</div>
+                      <div
+                        class="item-desc"
+                        v-if="item.description"
+                      >
+                        {{ item.description }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </RecycleScroller>
+              <div
+                v-else
+                class="no-results"
+              >
+                搜索到 0 个结果
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -387,15 +490,64 @@
         }
       }
     }
-    .search-results {
+    .search-results-container {
       width: 100%;
-      padding: 20px;
-      color: @color-placeholder;
-      text-align: center;
-      min-height: 100px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: @color-bg-white;
+      border-radius: 0 0 @radius-lg @radius-lg;
+      overflow: hidden;
+
+      .scroller {
+        height: 400px; /* 固定高度启用虚拟列表 */
+        padding: 8px 0;
+        overflow-x: hidden;
+
+        .result-item-wrapper {
+          width: 100%;
+          contain: content; // 告知浏览器该元素内容独立，优化渲染性能
+          backface-visibility: hidden;
+          perspective: 1000px;
+        }
+      }
+
+      .no-results {
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: @color-placeholder;
+      }
+
+      .result-item {
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        height: 54px; /* 必须与 item-size 一致 */
+        contain: strict;
+        cursor: pointer;
+        background: @color-bg-white;
+
+        &:hover {
+          background: @color-bg-base;
+        }
+
+        .item-icon {
+          margin-right: 12px;
+          color: @color-placeholder;
+        }
+        .item-info {
+          display: flex;
+          flex-direction: column;
+          .item-title {
+            font-size: 14px;
+            color: @color-text-1;
+            font-weight: 500;
+          }
+          .item-desc {
+            font-size: 12px;
+            color: @color-placeholder;
+          }
+        }
+      }
     }
   }
 </style>
