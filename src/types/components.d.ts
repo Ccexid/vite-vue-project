@@ -11,8 +11,12 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    IEpArrowRight: typeof import('~icons/ep/arrow-right')['default']
+    IEpCircleClose: typeof import('~icons/ep/circle-close')['default']
     IEpDocument: typeof import('~icons/ep/document')['default']
+    IEpFolder: typeof import('~icons/ep/folder')['default']
     IEpSearch: typeof import('~icons/ep/search')['default']
+    IEpSearchFolder: typeof import('~icons/ep/search-folder')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchBox: typeof import('./../components/search-box/index.vue')['default']

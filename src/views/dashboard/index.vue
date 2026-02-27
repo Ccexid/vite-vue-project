@@ -30,7 +30,7 @@
 
   onMounted(() => {
     // 优化：直接赋值比循环 push 效率更高
-    options.value = Array.from({ length: 100000 }, (_, i) => ({
+    options.value = Array.from({ length: 100 }, (_, i) => ({
       id: i + 1,
       title: `选项 ${i + 1}`,
       description: `这是选项 ${i + 1} 的描述`,
