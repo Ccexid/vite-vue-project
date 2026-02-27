@@ -8,9 +8,10 @@
 
   // 统一动画配置
   const animConfig = {
-    duration: 0.4,
-    ease: 'expo.out', // 更高级的减速曲线
-    startScale: 0.8, // 从 0.8 变大到 1
+    duration: 0.3, // 缩短时间，让线性感更强
+    ease: 'power2.out', // 弹出：线性减速
+    easeOut: 'power2.in', // 关闭：线性加速
+    startScale: 0.9, // 缩放范围从 0.9 到 1（比例小一点更显精致）
   };
 
   const props = defineProps({
@@ -37,66 +38,53 @@
    * 流程：开启状态 -> 等待DOM -> 清理旧动画 -> 执行新动画 -> 自动聚焦
    */
   const openModal = async () => {
-    // 1. 开启状态门禁，防止重复触发
     if (isModalOpen.value) return;
-
     isModalOpen.value = true;
-
-    // 2. 关键：等待 Vue 将 v-if 中的 DOM 渲染到页面上
-    // 否则 dialogRef.value 将会是 null
     await nextTick();
 
-    // 3. 动画初始化：清理上一次可能存在的动画残留
     if (activeTimeline) activeTimeline.kill();
-
-    // 创建 GSAP 时间轴，方便管理多个元素的配合
     activeTimeline = gsap.timeline();
 
-    // 4. 执行遮罩层和对话框的组合动画
-    activeTimeline
-      // 遮罩层：从透明到半透明
-      .fromTo(maskRef.value, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.out' })
-      // 对话框：从小变大 (scale 0.8 -> 1) + 位移 (y 40 -> 0) + 3D旋转
-      .fromTo(
-        dialogRef.value,
-        {
-          opacity: 0,
-          scale: 0.8, // 初始缩小
-          y: 40, // 从下方弹起
-          transform: 'perspective(1000px) rotateX(15deg)', // 初始倾斜角度
+    activeTimeline.fromTo(maskRef.value, { opacity: 0 }, { opacity: 1, duration: 0.2 }).fromTo(
+      dialogRef.value,
+      {
+        opacity: 0,
+        scale: animConfig.startScale, // 从 0.9 开始
+        y: 10, // 稍微有点向上的位移即可，不要过大
+        transform: 'perspective(1000px) rotateX(0deg)', // 去掉 3D 旋转保持平面化线性感
+      },
+      {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: animConfig.duration,
+        ease: animConfig.ease, // 使用线性减速
+        onComplete: () => {
+          inputRef.value?.focus();
         },
-        {
-          opacity: 1,
-          scale: 1,
-          y: 0,
-          transform: 'perspective(1000px) rotateX(0deg)', // 回归正位
-          duration: 0.5,
-          ease: 'back.out(1.7)', // 带有一点点回弹感，增加“果冻”质感
-          onComplete: () => {
-            // 5. 动画彻底结束后，精准聚焦输入框
-            // 此时浏览器已经完成了 3D 渲染，聚焦最稳定
-            inputRef.value?.focus();
-          },
-        },
-        '-=0.15', // 提前 0.15 秒开始，让遮罩和弹窗动画产生重叠感，更自然
-      );
+      },
+      '-=0.1',
+    );
   };
 
-  // 关闭弹窗 (核心修复)
+  /**
+   * 关闭弹窗逻辑
+   * 流程：等待动画 -> 清理动画 -> 关闭状态
+   */
   const closeModal = () => {
     if (activeTimeline) activeTimeline.kill();
     activeTimeline = gsap.timeline({
       onComplete: () => {
-        isModalOpen.value = false; // 动画播完后再销毁 DOM
+        isModalOpen.value = false;
       },
     });
 
     activeTimeline.to(dialogRef.value, {
       opacity: 0,
-      scale: animConfig.startScale,
-      y: 20,
-      duration: 0.3,
-      ease: 'power2.in',
+      scale: animConfig.startScale, // 缩回到 0.9
+      y: 10, // 向下位移
+      duration: 0.25,
+      ease: animConfig.easeOut, // 线性加速消失
     });
 
     activeTimeline.to(
@@ -105,7 +93,7 @@
         opacity: 0,
         duration: 0.2,
       },
-      '-=0.2',
+      '-=0.15',
     );
   };
 
@@ -116,8 +104,9 @@
   const handleInputFocus = () => {
     inputRef.value?.select(); // 聚焦时全选文字，方便快速重写
   };
-
-  // 监听状态绑定事件
+  /**
+   *  监听弹窗状态变化，控制 body 滚动
+   */
   watch(isModalOpen, (val) => {
     if (val) {
       document.body.style.overflow = 'hidden';
@@ -127,7 +116,9 @@
       document.removeEventListener('keydown', handleKeyDownWithESC);
     }
   });
-
+  /**
+   * 组件卸载时，移除事件监听和动画
+   */
   onUnmounted(() => {
     document.removeEventListener('keydown', handleKeyDownWithESC);
     if (activeTimeline) activeTimeline.kill();
