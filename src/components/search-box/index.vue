@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+  import { debounce } from 'lodash-es';
   import { gsap } from 'gsap';
   const isModalOpen = ref(false);
   const dialogRef = ref<HTMLDivElement | null>(null);
@@ -32,6 +33,27 @@
   const placeholder = computed(() => props.placeholder);
   const teleportTo = computed(() => props.teleportTo);
   const zIndex = computed(() => props.zIndex);
+
+  const emit = defineEmits<{
+    (e: 'search', keyword: string): void;
+  }>();
+
+  /**
+   * 防抖处理：明确定义参数类型为 string，返回值为 void
+   * 延迟 300ms 触发，减少父组件过滤逻辑的计算压力
+   */
+  const debouncedSearch = debounce((value: string): void => {
+    console.log('search input...', value);
+    emit('search', value);
+  }, 300);
+
+  /**
+   * 处理输入事件
+   */
+  const handleInput = (e: Event): void => {
+    const target = e.target as HTMLInputElement;
+    debouncedSearch(target.value);
+  };
 
   /**
    * 打开弹窗逻辑
@@ -165,6 +187,7 @@
                   type="search"
                   :placeholder="placeholder"
                   @focus="handleInputFocus"
+                  @input="handleInput"
                 />
               </div>
               <div class="search-modal-right">
