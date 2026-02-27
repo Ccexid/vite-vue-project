@@ -43,7 +43,6 @@
    * 延迟 300ms 触发，减少父组件过滤逻辑的计算压力
    */
   const debouncedSearch = debounce((value: string): void => {
-    console.log('search input...', value);
     emit('search', value);
   }, 300);
 
