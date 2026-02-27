@@ -291,16 +291,11 @@
 </template>
 
 <style lang="less" scoped>
-  @primary-color: #5468ff;
-  @text-main: #1c1e21;
-  @text-muted: #969faf;
-  @bg-dialog: #f5f6f7;
-  @border-color: #ebedf0;
-
+  // 1. 触发器样式
   .algolia-trigger {
     width: 240px;
     height: 36px;
-    background: #ebedf0;
+    background: var(--sb-border);
     border-radius: 40px;
     display: flex;
     align-items: center;
@@ -309,43 +304,47 @@
     cursor: pointer;
     transition: all 0.2s;
     border: 1px solid transparent;
+
     &:hover {
-      background: #fff;
-      border-color: @primary-color;
+      background: var(--sb-bg-input);
+      border-color: var(--sb-primary);
       .search-icon {
-        color: @primary-color;
+        color: var(--sb-primary);
       }
     }
+
     .left {
       display: flex;
       align-items: center;
-      color: @text-muted;
+      color: var(--sb-text-muted);
       font-size: 14px;
       .search-icon {
         margin-right: 8px;
         font-size: 16px;
       }
     }
+
     .shortcut-hint {
       display: flex;
       gap: 4px;
       .key {
-        background: #fff;
-        border: 1px solid @text-muted;
+        background: var(--sb-bg-input);
+        border: 1px solid var(--sb-text-muted);
         border-radius: 4px;
         padding: 0 4px;
         font-size: 11px;
-        color: @text-muted;
+        color: var(--sb-text-muted);
         min-width: 18px;
         text-align: center;
       }
     }
   }
 
+  // 2. 遮罩与对话框
   .algolia-mask {
     position: fixed;
     inset: 0;
-    background: rgba(101, 108, 133, 0.8);
+    background: var(--sb-bg-mask);
     display: flex;
     justify-content: center;
     padding-top: 80px;
@@ -356,57 +355,93 @@
   .algolia-dialog {
     width: 600px;
     max-height: 80vh;
-    background: @bg-dialog;
+    background: var(--sb-bg-dialog);
     border-radius: 8px;
-    box-shadow: 0 15px 50px -10px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--sb-shadow);
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    border: 1px solid var(--sb-border);
   }
 
+  // 3. 头部输入框
   .algolia-header {
     height: 64px;
-    background: #fff;
+    background: var(--sb-bg-input);
     display: flex;
     align-items: center;
     padding: 0 20px;
-    border-bottom: 2px solid @primary-color;
+    border-bottom: 2px solid var(--sb-primary);
+
     .input-icon {
       font-size: 22px;
-      color: @primary-color;
+      color: var(--sb-primary);
       margin-right: 12px;
     }
+
     input {
       flex: 1;
       border: none;
       outline: none;
       font-size: 18px;
-      color: @text-main;
+      color: var(--sb-text-main);
       background: transparent;
+      &::placeholder {
+        color: var(--sb-text-muted);
+      }
     }
+
     .clear-btn {
       border: none;
       background: none;
       cursor: pointer;
-      color: @text-muted;
+      color: var(--sb-text-muted);
+      &:hover {
+        color: var(--sb-primary);
+      }
     }
   }
 
+  // 4. 内容主体与滚动项
   .algolia-body {
     flex: 1;
     overflow: hidden;
-    background: @bg-dialog;
+    background: var(--sb-bg-dialog);
 
-    // 解决间隔和滚动报错的关键
     .scroller {
       height: 500px;
+      padding: 0 12px;
       overflow-y: auto !important;
-      padding: 0 12px; // 将 padding 限制在左右，不影响垂直滚动计算
+
+      /* 标准属性：Firefox 支持 */
+      scrollbar-width: thin;
+      scrollbar-color: var(--sb-scrollbar-thumb) var(--sb-scrollbar-track);
+
+      /* Webkit 引擎：Chrome, Safari, Edge 支持 */
+      &::-webkit-scrollbar {
+        width: 6px; /* 纵向滚动条宽度 */
+      }
+
+      &::-webkit-scrollbar-track {
+        background: var(--sb-scrollbar-track);
+        border-radius: 10px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: var(--sb-scrollbar-thumb);
+        border-radius: 10px;
+        border: 1px solid var(--sb-scrollbar-track); /* 增加一点边距感 */
+
+        &:hover {
+          /* 悬停时稍微变亮或变暗增强反馈 */
+          filter: brightness(1.2);
+        }
+      }
     }
   }
 
   .algolia-item-wrapper {
-    height: 64px; // 必须与 item-size 严格一致
+    height: 64px; // 必须与虚拟列表 item-size 保持一致
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -414,75 +449,84 @@
 
   .algolia-item {
     width: 100%;
-    background: #fff;
+    background: var(--sb-bg-item);
     border-radius: 6px;
     height: 56px;
     display: flex;
     align-items: center;
     padding: 0 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease;
+    box-shadow: var(--sb-item-shadow);
+    transition:
+      background-color 0.2s,
+      box-shadow 0.2s;
+    overflow: hidden; // 确保圆角不被内部背景溢出
 
-    // 修改点：将 hover 逻辑合并到 is-active 类中
+    // 选中/激活状态样式驱动
     &.is-active {
-      background: @primary-color;
+      background: var(--sb-primary);
       box-shadow: 0 4px 12px rgba(84, 104, 255, 0.3);
 
       .title,
       .desc,
-      .item-icon-box,
-      .enter-icon {
-        color: #fff !important;
+      .item-icon-box {
+        color: var(--sb-text-white) !important;
       }
 
       .enter-icon {
-        opacity: 1;
-        transform: translateX(2px);
+        opacity: 1; // 使用 opacity 控制显隐，不影响布局
+        color: var(--sb-text-white) !important;
+        transform: translateX(0);
       }
     }
 
     .item-icon-box {
-      color: @text-muted;
+      color: var(--sb-text-muted);
       margin-right: 16px;
       font-size: 20px;
     }
+
     .item-content {
       flex: 1;
       .title {
         font-size: 14px;
         font-weight: 500;
-        color: @text-main;
+        color: var(--sb-text-main);
       }
       .desc {
         font-size: 12px;
-        color: @text-muted;
+        color: var(--sb-text-muted);
+        margin-top: 2px;
       }
     }
+
     .enter-icon {
-      color: transparent; // 默认隐藏图标
+      opacity: 0; // 默认隐藏
       font-size: 14px;
-      opacity: 0;
+      color: var(--sb-text-white);
+      transform: translateX(-5px); // 初始微调，增加浮现感
       transition: all 0.2s ease;
     }
   }
 
+  // 5. 底部与空状态
   .algolia-footer {
     height: 44px;
-    background: #fff;
-    border-top: 1px solid @border-color;
+    background: var(--sb-bg-footer);
+    border-top: 1px solid var(--sb-border);
     display: flex;
     align-items: center;
     padding: 0 20px;
     gap: 20px;
     font-size: 12px;
-    color: @text-muted;
+    color: var(--sb-text-muted);
+
     .key-tag {
-      background: #f5f6f7;
-      border: 1px solid @border-color;
+      background: var(--sb-bg-dialog);
+      border: 1px solid var(--sb-border);
       border-radius: 4px;
       padding: 2px 6px;
       font-weight: bold;
-      color: @text-main;
+      color: var(--sb-text-main);
       margin-right: 4px;
     }
   }
@@ -490,16 +534,19 @@
   .empty-state {
     padding: 60px 0;
     text-align: center;
-    color: @text-muted;
+    color: var(--sb-text-muted);
   }
 
+  // 6. 搜索高亮效果
   .algolia-highlight {
     background: transparent;
-    color: @primary-color;
+    color: var(--sb-primary);
     text-decoration: underline;
     font-weight: bold;
   }
-  .algolia-item:hover .algolia-highlight {
-    color: #fff;
+
+  // 处于激活项内的高亮词变为白色
+  .is-active .algolia-highlight {
+    color: var(--sb-text-white) !important;
   }
 </style>

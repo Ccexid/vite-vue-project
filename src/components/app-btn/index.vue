@@ -9,41 +9,27 @@
   </button>
 </template>
 <style lang="less" scoped>
-  // 基础颜色
-  @btn-primary-color: #5468ff;
-  @btn-text-color: #1c1e21;
-  @btn-bg-color: #ffffff;
-  @btn-border-color: #ebedf0;
-
-  // 交互颜色
-  @btn-hover-bg: @btn-primary-color;
-  @btn-hover-text: #ffffff;
-  @btn-active-bg: darken(@btn-primary-color, 5%); // 点击时加深 5%
-
-  // 辅助
-  @btn-disabled-opacity: 0.6;
-  @btn-transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-  @btn-radius: 4px;
   .app-btn {
-    // 1. 布局属性
+    // 1. 布局与尺寸
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    padding: 8px 15px;
+    padding: 0 15px; // 配合固定高度使用左右 padding
     height: 32px;
+    min-width: 64px; // 保证短文本按钮的审美比例
 
     // 2. 文本属性
-    color: @btn-text-color;
+    color: var(--sb-text-main); // 引用语义化变量
     font-size: 14px;
     font-weight: 500;
     line-height: 1;
     white-space: nowrap;
     text-align: center;
 
-    // 3. 装饰属性
-    background-color: @btn-bg-color;
-    border: 1px solid @btn-border-color;
-    border-radius: @btn-radius;
+    // 3. 装饰属性 (适配黑夜模式)
+    background-color: var(--sb-bg-item); // 按钮背景跟随列表项色值
+    border: 1px solid var(--sb-border);   // 引用统一边框色
+    border-radius: 4px;
     box-sizing: border-box;
 
     // 4. 交互控制
@@ -52,33 +38,31 @@
     appearance: none;
     user-select: none;
     vertical-align: middle;
-    transition: @btn-transition;
+    transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1); // 优化过渡曲线
 
-    // 悬停状态
+    // 5. 状态反馈
     &:hover {
-      background-color: @btn-hover-bg;
-      border-color: @btn-hover-bg;
-      color: @btn-hover-text;
+      background-color: var(--sb-primary);
+      border-color: var(--sb-primary);
+      color: var(--sb-text-white);
+      box-shadow: 0 4px 12px rgba(84, 104, 255, 0.3); // 悬停浮起感
     }
 
-    // 点击/激活状态 (解决你之前提到的视觉反馈问题)
     &:active {
-      background-color: @btn-active-bg;
-      border-color: @btn-active-bg;
-      transform: scale(0.98); // 轻微缩放增加点击感
+      filter: brightness(0.9); // 点击时自动变暗 10%，适配所有背景色
+      transform: scale(0.96);  // 增强点击的物理反馈
     }
 
-    // 禁用状态处理 (对应 template 中的 aria-disabled)
+    // 6. 禁用状态 (对应组件 aria-disabled 属性)
     &[aria-disabled='true'],
     &:disabled {
       cursor: not-allowed;
-      opacity: @btn-disabled-opacity;
-      background-color: @btn-border-color;
-      &:hover {
-        // 禁用时防止触发 hover 变色
-        background-color: @btn-border-color;
-        color: @btn-text-color;
-      }
+      opacity: 0.5;
+      background-color: var(--sb-bg-dialog) !important; // 禁用时使用对话框背景色
+      border-color: var(--sb-border) !important;
+      color: var(--sb-text-muted) !important;
+      transform: none !important;
+      box-shadow: none !important;
     }
   }
 </style>

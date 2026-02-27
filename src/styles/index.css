@@ -3,6 +3,44 @@
 /* Document
    ========================================================================== */
 
+/* 基础变量定义 */
+:root {
+  --sb-primary: #5468ff;
+  --sb-bg-mask: rgba(101, 108, 133, 0.8);
+  --sb-bg-dialog: #f5f6f7;
+  --sb-bg-item: #ffffff;
+  --sb-bg-input: #ffffff;
+  --sb-bg-footer: #ffffff;
+
+  --sb-text-main: #1c1e21;
+  --sb-text-muted: #969faf;
+  --sb-text-white: #ffffff;
+
+  --sb-border: #ebedf0;
+  --sb-shadow: 0 15px 50px -10px rgba(0, 0, 0, 0.3);
+  --sb-item-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --sb-scrollbar-thumb: #d1d5db; /* 滚动条滑块颜色 - 浅色 */
+  --sb-scrollbar-track: #f1f1f1; /* 滚动条轨道颜色 - 浅色 */
+}
+
+/* 黑夜模式变量覆盖 */
+[data-theme='dark'] {
+  --sb-bg-mask: rgba(0, 0, 0, 0.85);
+  --sb-bg-dialog: #242526;
+  --sb-bg-item: #2f3031;
+  --sb-bg-input: #1a1a1b;
+  --sb-bg-footer: #1a1a1b;
+
+  --sb-text-main: #e3e3e3;
+  --sb-text-muted: #a0a0a0;
+
+  --sb-border: #3e3f41;
+  --sb-shadow: 0 15px 50px -10px rgba(0, 0, 0, 0.6);
+  --sb-item-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --sb-scrollbar-thumb: #4a4b4d; /* 滚动条滑块颜色 - 深色 */
+  --sb-scrollbar-track: #242526; /* 滚动条轨道颜色 - 深色 */
+}
+
 /**
  * 1. Correct the line height in all browsers.
  * 2. Prevent adjustments of font size after orientation changes in iOS.
