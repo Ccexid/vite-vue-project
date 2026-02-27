@@ -2,8 +2,10 @@
   import { debounce } from 'lodash-es';
   import { gsap } from 'gsap';
   import { RecycleScroller } from 'vue-virtual-scroller';
+  import { onClickOutside, useEventListener, useFocus, useScrollLock } from '@vueuse/core';
   import type { SearchItem } from '@/types/search-box';
 
+  // ===================== 状态与 Refs =====================
   const isModalOpen = ref(false);
   const dialogRef = ref<HTMLDivElement | null>(null);
   const maskRef = ref<HTMLDivElement | null>(null);
@@ -11,47 +13,53 @@
   const scrollerRef = ref();
   let activeTimeline: gsap.core.Timeline | null = null;
 
+  // 使用 VueUse 管理输入框焦点
+  const { focused } = useFocus(inputRef);
+  // 使用 VueUse 管理 Body 滚动锁定，替代手动操作 style
+  const isLocked = useScrollLock(document.body);
+
   // 统一动画配置
   const animConfig = {
-    duration: 0.3, // 缩短时间，让线性感更强
-    ease: 'power2.out', // 弹出：线性减速
-    easeOut: 'power2.in', // 关闭：线性加速
-    startScale: 0.9, // 缩放范围从 0.9 到 1（比例小一点更显精致）
+    duration: 0.3,
+    ease: 'power2.out',
+    easeOut: 'power2.in',
+    startScale: 0.9,
   };
+
   /**
    * 每个列表项的动画逻辑
-   * @param el 元素 DOM
-   * @param index 元素在列表中的原始索引
    */
   const animateItemIn = (el: HTMLElement | null, index: number) => {
     if (!el) return;
 
-    // 1. 立即清理，但使用 auto 模式减少计算开销
-    gsap.killTweensOf(el);
+    // 关键优化：使用 requestAnimationFrame 确保动画在浏览器下一帧执行，避免卡顿
+    requestAnimationFrame(() => {
+      gsap.killTweensOf(el);
 
-    // 2. 优化延迟算法
-    // 滚动时 index 很大，(index % 10) 仍然有效，但我们可以限制它只在首屏生效
-    const isInitial = index < 10;
-    const staggerDelay = isInitial ? index * 0.05 : 0;
+      // 限制首屏动画数量，超过 10 个后的项目直接显示，不再执行位移动画以节省性能
+      const isInitial = index < 10;
+      if (!isInitial) {
+        gsap.set(el, { x: 0, opacity: 1 });
+        return;
+      }
 
-    // 3. 执行轻量化动画
-    gsap.fromTo(
-      el,
-      {
-        x: -20, // 减小位移距离，减少卡顿感
-        opacity: 0,
-      },
-      {
-        x: 0,
-        opacity: 1,
-        duration: 0.3, // 缩短持续时间
-        delay: staggerDelay,
-        ease: 'sine.out', // 使用更平滑的曲线
-        force3D: true, // 强制硬件加速
-        clearProps: 'transform,opacity', // 动画结束彻底清理，减轻浏览器负担
-        overwrite: 'auto',
-      },
-    );
+      const staggerDelay = index * 0.03; // 缩短延迟，提升响应感
+
+      gsap.fromTo(
+        el,
+        { x: -15, opacity: 0 }, // 减小位移距离（从 -20 减为 -15）减少重绘区域
+        {
+          x: 0,
+          opacity: 1,
+          duration: 0.25, // 缩短持续时间
+          delay: staggerDelay,
+          ease: 'sine.out',
+          force3D: true, // 强制 3D 加速
+          clearProps: 'all', // 动画结束彻底清理所有行内样式
+          overwrite: 'auto',
+        },
+      );
+    });
   };
 
   const props = defineProps({
@@ -73,37 +81,30 @@
     },
   });
 
-  const placeholder = computed(() => props.placeholder);
-  const teleportTo = computed(() => props.teleportTo);
-  const zIndex = computed(() => props.zIndex);
-
   const emit = defineEmits<{
     (e: 'search', keyword: string): void;
+    (e: 'click-item', item: SearchItem): void;
   }>();
 
-  /**
-   * 防抖处理：明确定义参数类型为 string，返回值为 void
-   * 延迟 300ms 触发，减少父组件过滤逻辑的计算压力
-   */
+  // ===================== 核心逻辑 =====================
+
   const debouncedSearch = debounce((value: string): void => {
     emit('search', value);
   }, 300);
 
-  /**
-   * 处理输入事件
-   */
+  const handleClick = (item: SearchItem): void => {
+    emit('click-item', item);
+  };
+
   const handleInput = (e: Event): void => {
     const target = e.target as HTMLInputElement;
     debouncedSearch(target.value);
   };
 
-  /**
-   * 打开弹窗逻辑
-   * 流程：开启状态 -> 等待DOM -> 清理旧动画 -> 执行新动画 -> 自动聚焦
-   */
   const openModal = async () => {
     if (isModalOpen.value) return;
     isModalOpen.value = true;
+    isLocked.value = true; // 锁定滚动
     await nextTick();
 
     if (activeTimeline) activeTimeline.kill();
@@ -113,99 +114,72 @@
       dialogRef.value,
       {
         opacity: 0,
-        scale: animConfig.startScale, // 从 0.9 开始
-        y: 10, // 稍微有点向上的位移即可，不要过大
-        transform: 'perspective(1000px) rotateX(0deg)', // 去掉 3D 旋转保持平面化线性感
+        scale: animConfig.startScale,
+        y: 10,
       },
       {
         opacity: 1,
         scale: 1,
         y: 0,
         duration: animConfig.duration,
-        ease: animConfig.ease, // 使用线性减速
+        ease: animConfig.ease,
         onComplete: () => {
-          inputRef.value?.focus();
+          focused.value = true; // 自动聚焦
+          inputRef.value?.select();
         },
       },
       '-=0.1',
     );
   };
 
-  /**
-   * 关闭弹窗逻辑
-   * 流程：等待动画 -> 清理动画 -> 关闭状态
-   */
   const closeModal = () => {
     if (activeTimeline) activeTimeline.kill();
-
     emit('search', '');
 
     activeTimeline = gsap.timeline({
       onComplete: () => {
         isModalOpen.value = false;
+        isLocked.value = false; // 解除锁定
       },
     });
 
     activeTimeline.to(dialogRef.value, {
       opacity: 0,
-      scale: animConfig.startScale, // 缩回到 0.9
-      y: 10, // 向下位移
+      scale: animConfig.startScale,
+      y: 10,
       duration: 0.25,
-      ease: animConfig.easeOut, // 线性加速消失
+      ease: animConfig.easeOut,
     });
 
-    activeTimeline.to(
-      maskRef.value,
-      {
-        opacity: 0,
-        duration: 0.2,
-      },
-      '-=0.15',
-    );
+    activeTimeline.to(maskRef.value, { opacity: 0, duration: 0.2 }, '-=0.15');
   };
 
-  const handleKeyDownWithESC = (e: KeyboardEvent) => {
-    if (e.key === 'Escape' || e.key === 'Esc') closeModal();
-  };
+  // ===================== VueUse 事件监听 =====================
 
-  const handleInputFocus = () => {
-    inputRef.value?.select(); // 聚焦时全选文字，方便快速重写
-  };
-  /**
-   *  监听弹窗状态变化，控制 body 滚动
-   */
-  watch(isModalOpen, (val) => {
-    if (val) {
-      document.body.style.overflow = 'hidden';
-      document.addEventListener('keydown', handleKeyDownWithESC);
-    } else {
-      document.body.style.overflow = '';
-      document.removeEventListener('keydown', handleKeyDownWithESC);
+  // 1. 点击弹窗外部自动关闭
+  onClickOutside(dialogRef, () => {
+    if (isModalOpen.value) closeModal();
+  });
+
+  // 2. 使用 useEventListener 替代手动 addEventListener/removeEventListener
+  useEventListener(document, 'keydown', (e) => {
+    if (isModalOpen.value && (e.key === 'Escape' || e.key === 'Esc')) {
+      closeModal();
     }
   });
 
-  /**
-   * 监听搜索结果 options 的变化
-   * 当用户输入关键词导致列表更新时，自动重置滚动条到顶部
-   */
+  // 3. 监听搜索结果重置滚动条
   watch(
     () => props.options,
     () => {
-      // 确保在 DOM 更新后执行滚动重置
       nextTick(() => {
-        if (scrollerRef.value) {
-          // scrollToPosition(0) 会将滚动条拉回到最上方
-          scrollerRef.value.scrollToPosition(0);
-        }
+        if (scrollerRef.value) scrollerRef.value.scrollToPosition(0);
       });
     },
-    { deep: false }, // 搜索结果通常是替换整个数组，不需要深监听
+    { deep: false },
   );
-  /**
-   * 组件卸载时，移除事件监听和动画
-   */
+
   onUnmounted(() => {
-    document.removeEventListener('keydown', handleKeyDownWithESC);
     if (activeTimeline) activeTimeline.kill();
   });
 </script>
@@ -249,7 +223,6 @@
                   ref="inputRef"
                   type="search"
                   :placeholder="placeholder"
-                  @focus="handleInputFocus"
                   @input="handleInput"
                 />
               </div>
@@ -276,6 +249,7 @@
                   @vue:mounted="
                     (vnode: { el: HTMLElement }) => animateItemIn(vnode.el as HTMLElement, index)
                   "
+                  @click.self="handleClick(item)"
                 >
                   <div class="result-item">
                     <div class="item-icon"><i-ep-document /></div>
