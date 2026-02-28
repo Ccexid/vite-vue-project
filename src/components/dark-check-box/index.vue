@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { gsap } from 'gsap';
   import { useDark } from '@vueuse/core';
+  import { ref } from 'vue';
 
   const isDark = useDark({
     selector: 'html',
@@ -10,12 +11,21 @@
   });
 
   const iconTrackRef = ref<HTMLDivElement | null>(null);
+  const isAnimating = ref(false);
 
   const handleToggle = (event: MouseEvent) => {
+    if (isAnimating.value) return;
+
     const willBeDark = !isDark.value;
     const { clientX, clientY } = event;
+    const html = document.documentElement;
 
-    // 1. 开关内部滚动动画
+    const maxRadius = Math.hypot(
+      Math.max(clientX, window.innerWidth - clientX),
+      Math.max(clientY, window.innerHeight - clientY),
+    );
+
+    // 1. 图标滚动动画
     gsap.to(iconTrackRef.value, {
       x: willBeDark ? 28 : 0,
       rotation: willBeDark ? 360 : 0,
@@ -23,38 +33,60 @@
       ease: 'back.out(1.5)',
     });
 
-    // 2. 扩散动画
-    const html = document.documentElement;
-    const maxRadius = Math.hypot(
-      Math.max(clientX, window.innerWidth - clientX),
-      Math.max(clientY, window.innerHeight - clientY),
-    );
-
+    isAnimating.value = true;
     html.style.setProperty('--ripple-x', `${clientX}px`);
     html.style.setProperty('--ripple-y', `${clientY}px`);
 
-    gsap.to(html, {
-      '--ripple-radius': `${maxRadius}px`,
-      duration: 0.7,
-      ease: 'power2.inOut',
-      onStart: () => {
-        isDark.value = willBeDark;
-      },
+    const tl = gsap.timeline({
       onComplete: () => {
-        // --- 关键修复：直接移除 style 属性中的变量 ---
-        // 这样 CSS 中的 html[style*="--ripple-radius"] 选择器就会失效
-        // 从而让 clip-path 恢复为默认的 none 或全屏状态
         html.style.removeProperty('--ripple-radius');
         html.style.removeProperty('--ripple-x');
         html.style.removeProperty('--ripple-y');
+        isAnimating.value = false;
       },
     });
+
+    if (willBeDark) {
+      // --- 明亮 -> 黑夜：从小圆扩大 ---
+      // 逻辑：立即切到黑夜，但 clip-path 从 0 开始扩大，黑色逐渐显现
+      tl.fromTo(
+        html,
+        { '--ripple-radius': '0px' },
+        {
+          '--ripple-radius': `${maxRadius}px`,
+          duration: 0.8,
+          ease: 'power2.inOut',
+          onStart: () => {
+            isDark.value = true;
+          },
+        },
+      );
+    } else {
+      // --- 黑夜 -> 明亮：从全屏收缩 ---
+      // 逻辑：为了防止背景直接变白，我们利用“反向裁剪”
+      // 动画过程中保持 isDark = true，通过把黑色“吸走”来露出白底
+      // 这要求 CSS 中 data-theme='dark' 的优先级和逻辑配合
+      tl.fromTo(
+        html,
+        { '--ripple-radius': `${maxRadius}px` },
+        {
+          '--ripple-radius': '0px',
+          duration: 0.8,
+          ease: 'power2.inOut',
+          onComplete: () => {
+            // 只有当黑色收缩到消失时，才正式切换 data-theme 属性
+            isDark.value = false;
+          },
+        },
+      );
+    }
   };
 </script>
 
 <template>
   <div
     class="theme-switch-bar"
+    :class="{ 'is-animating': isAnimating }"
     @click="handleToggle"
   >
     <div
@@ -76,7 +108,6 @@
 </template>
 
 <style lang="less" scoped>
-  /* 按钮样式保持您的原有配置 */
   .theme-switch-bar {
     width: 58px;
     height: 30px;
@@ -90,6 +121,11 @@
     display: flex;
     align-items: center;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+
+    // 动画期间禁用鼠标手势
+    &.is-animating {
+      cursor: wait;
+    }
 
     .icon-track {
       width: 24px;

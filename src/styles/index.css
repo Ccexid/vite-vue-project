@@ -20,17 +20,15 @@
   /* 品牌与装饰 */
   --sb-primary: #5468ff;
   --sb-border: #ebedf0;
-  --sb-btn-ball: #ffffff; /* 切换按钮滑块颜色 */
+  --sb-btn-ball: #ffffff;
 
-  /* 阴影 */
+  /* 阴影与装饰 */
   --sb-shadow: 0 15px 50px -10px rgba(0, 0, 0, 0.3);
   --sb-item-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
-  /* 滚动条 */
   --sb-scrollbar-thumb: #d1d5db;
   --sb-scrollbar-track: #f1f1f1;
 
-  /* GSAP 扩散动画变量 */
+  /* GSAP 动画控制变量 */
   --ripple-radius: 0px;
   --ripple-x: 0px;
   --ripple-y: 0px;
@@ -59,25 +57,30 @@
 }
 
 /* ==========================================================================
-   2. 核心动画逻辑 (GSAP Clip-path)
+   2. 核心动画逻辑 (Clip-path 裁剪控制)
    ========================================================================== */
 
-/* 关键点：不再使用实体遮罩层，而是直接裁剪 html 根节点。
-   默认状态下裁剪半径设为全屏，确保页面可见。
-*/
 html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
-  /* 默认全屏可见 */
-  clip-path: circle(calc(100% + 100vw) at var(--ripple-x) var(--ripple-y));
+  /* 重点：html 设为纯白。当黑夜模式收缩动画执行时，裁剪区外会显露此颜色 */
+  background-color: var(--sb-bg-layout);
+  /* 初始状态不裁剪 */
+  clip-path: none;
 }
 
-/* 当 GSAP 正在驱动 --ripple-radius 变量时，应用该裁剪半径 */
+/* 当 GSAP 写入 style 变量时，激活裁剪 */
 html[style*='--ripple-radius'] {
-  clip-path: circle(var(--ripple-radius) at var(--ripple-x) var(--ripple-y));
+  /* 强制执行裁剪，控制可见区域 */
+  clip-path: circle(var(--ripple-radius) at var(--ripple-x) var(--ripple-y)) !important;
 }
 
-/* 切换主题时禁用 CSS 默认过渡，避免与 GSAP 冲突 */
+/* 动画进行中，禁用所有元素的 CSS Transition，防止颜色切换滞后 */
+html[style*='--ripple-radius'] * {
+  transition: none !important;
+}
+
+/* 兼容性处理：禁用主题属性引发的默认 CSS 过渡 */
 html[data-theme] {
   transition: none !important;
 }
@@ -86,165 +89,61 @@ body {
   margin: 0;
   background-color: var(--sb-bg-layout);
   color: var(--sb-text-main);
-  transition: none; /* 由动画逻辑接管 */
+  /* 禁用背景色改变时的 transition，完全由 GSAP 裁剪逻辑表现过渡 */
+  transition: none !important;
 }
 
 /* ==========================================================================
-   3. Normalize.css 基础重置
+   3. 基础样式重置 (Normalize 简化版)
    ========================================================================== */
 main {
   display: block;
 }
-h1 {
-  font-size: 2em;
-  margin: 0.67em 0;
-}
-hr {
-  box-sizing: content-box;
-  height: 0;
-  overflow: visible;
-}
-pre {
-  font-family: monospace, monospace;
-  font-size: 1em;
-}
 a {
   background-color: transparent;
-}
-abbr[title] {
-  border-bottom: none;
-  text-decoration: underline dotted;
-}
-b,
-strong {
-  font-weight: bolder;
-}
-code,
-kbd,
-samp {
-  font-family: monospace, monospace;
-  font-size: 1em;
-}
-small {
-  font-size: 80%;
-}
-sub,
-sup {
-  font-size: 75%;
-  line-height: 0;
-  position: relative;
-  vertical-align: baseline;
-}
-sub {
-  bottom: -0.25em;
-}
-sup {
-  top: -0.5em;
+  text-decoration: none;
+  color: inherit;
 }
 img {
   border-style: none;
 }
-
-button,
-input,
-optgroup,
-select,
-textarea {
-  font-family: inherit;
-  font-size: 100%;
-  line-height: 1.15;
-  margin: 0;
-}
 button,
 input {
   overflow: visible;
+  font-family: inherit;
 }
-button,
-select {
-  text-transform: none;
-}
-button,
-[type='button'],
-[type='reset'],
-[type='submit'] {
+button {
+  cursor: pointer;
   appearance: button;
-}
-button::-moz-focus-inner,
-[type='button']::-moz-focus-inner,
-[type='reset']::-moz-focus-inner,
-[type='submit']::-moz-focus-inner {
-  border-style: none;
-  padding: 0;
-}
-fieldset {
-  padding: 0.35em 0.75em 0.625em;
-}
-legend {
-  box-sizing: border-box;
-  color: inherit;
-  display: table;
-  max-width: 100%;
-  padding: 0;
-  white-space: normal;
-}
-progress {
-  vertical-align: baseline;
-}
-textarea {
-  overflow: auto;
-}
-[type='checkbox'],
-[type='radio'] {
-  box-sizing: border-box;
-  padding: 0;
-}
-[type='number']::-webkit-inner-spin-button,
-[type='number']::-webkit-outer-spin-button {
-  height: auto;
-}
-[type='search'] {
-  appearance: textfield;
-  outline-offset: -2px;
-}
-[type='search']::-webkit-search-decoration {
-  -webkit-appearance: none;
-}
-::-webkit-file-upload-button {
-  -webkit-appearance: button;
-  font: inherit;
+  border: none;
+  background: none;
 }
 
-details {
-  display: block;
+/* 滚动条通用样式适配 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sb-scrollbar-thumb) var(--sb-scrollbar-track);
 }
-summary {
-  display: list-item;
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
-template {
-  display: none;
+
+::-webkit-scrollbar-track {
+  background: var(--sb-scrollbar-track);
 }
-[hidden] {
-  display: none;
+
+::-webkit-scrollbar-thumb {
+  background: var(--sb-scrollbar-thumb);
+  border-radius: 10px;
 }
 
 /* ==========================================================================
-   4. 原生 View Transition 回退配置 (可选)
+   4. View Transition 占位 (配合 GSAP 逻辑使用)
    ========================================================================== */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
-}
-
-[data-theme='dark']::view-transition-old(root) {
-  z-index: 1;
-}
-[data-theme='dark']::view-transition-new(root) {
-  z-index: 999;
-}
-::view-transition-old(root) {
-  z-index: 999;
-}
-::view-transition-new(root) {
-  z-index: 1;
 }
