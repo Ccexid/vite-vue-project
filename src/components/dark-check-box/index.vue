@@ -65,7 +65,6 @@
       // --- 黑夜 -> 明亮：从全屏收缩 ---
       // 逻辑：为了防止背景直接变白，我们利用“反向裁剪”
       // 动画过程中保持 isDark = true，通过把黑色“吸走”来露出白底
-      // 这要求 CSS 中 data-theme='dark' 的优先级和逻辑配合
       tl.fromTo(
         html,
         { '--ripple-radius': `${maxRadius}px` },
