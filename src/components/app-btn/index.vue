@@ -112,6 +112,15 @@
       font-size: 12px;
     }
 
+    &.is-round {
+      border-radius: 20px;
+    }
+    &.is-circle {
+      border-radius: 50%;
+      padding: 8px;
+      width: 32px;
+    }
+
     /* 状态控制 */
     &.is-disabled {
       cursor: not-allowed;
