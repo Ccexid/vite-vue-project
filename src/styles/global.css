@@ -99,6 +99,7 @@ html[data-theme] {
 }
 
 body {
+  padding: 0;
   margin: 0;
   background-color: var(--sb-bg-layout);
   color: var(--sb-text-main);
