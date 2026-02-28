@@ -1,19 +1,10 @@
 <script setup lang="ts">
   import type { SearchItem } from '@/types/search-box';
-  import { useDark, useToggle } from '@vueuse/core';
 
   // 原始数据池
   const options = ref<SearchItem[]>([]);
   // 搜索关键字状态
   const searchQuery = ref('');
-
-  const isDark = useDark({
-    selector: 'html',
-    attribute: 'data-theme', // 对应你 Less 中定义的 [data-theme='dark']
-    valueDark: 'dark',
-    valueLight: 'light',
-  });
-  const toggleDark = useToggle(isDark);
 
   /**
    * 优化：使用 computed 替代手动维护 searchList
@@ -54,7 +45,8 @@
       :options="filteredList"
       @search="handleSearch"
     />
-    <AppBtn @click="toggleDark()">{{ isDark ? '🌙 深色模式' : '☀️ 浅色模式' }}</AppBtn>
+    <AppBtn>按钮默认</AppBtn>
+    <DarkCheckBox />
     <RouterLink to="/404">Go to 404</RouterLink>
   </div>
 </template>

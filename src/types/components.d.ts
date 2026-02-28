@@ -12,12 +12,15 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AppBtn: typeof import('./../components/app-btn/index.vue')['default']
+    DarkCheckBox: typeof import('./../components/dark-check-box/index.vue')['default']
     IEpArrowRight: typeof import('~icons/ep/arrow-right')['default']
     IEpCircleClose: typeof import('~icons/ep/circle-close')['default']
     IEpDocument: typeof import('~icons/ep/document')['default']
     IEpFolder: typeof import('~icons/ep/folder')['default']
+    IEpMoon: typeof import('~icons/ep/moon')['default']
     IEpSearch: typeof import('~icons/ep/search')['default']
     IEpSearchFolder: typeof import('~icons/ep/search-folder')['default']
+    IEpSunny: typeof import('~icons/ep/sunny')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchBox: typeof import('./../components/search-box/index.vue')['default']

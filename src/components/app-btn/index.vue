@@ -14,21 +14,21 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    padding: 0 15px; // 配合固定高度使用左右 padding
+    padding: 0 15px;
     height: 32px;
-    min-width: 64px; // 保证短文本按钮的审美比例
+    min-width: 64px;
 
     // 2. 文本属性
-    color: var(--sb-text-main); // 引用语义化变量
+    color: var(--sb-text-main); // 引用全局变量
     font-size: 14px;
     font-weight: 500;
     line-height: 1;
     white-space: nowrap;
     text-align: center;
 
-    // 3. 装饰属性 (适配黑夜模式)
-    background-color: var(--sb-bg-item); // 按钮背景跟随列表项色值
-    border: 1px solid var(--sb-border);   // 引用统一边框色
+    // 3. 装饰属性
+    background-color: var(--sb-bg-item); // 引用全局变量
+    border: 1px solid var(--sb-border); // 引用全局变量
     border-radius: 4px;
     box-sizing: border-box;
 
@@ -38,31 +38,46 @@
     appearance: none;
     user-select: none;
     vertical-align: middle;
-    transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1); // 优化过渡曲线
+
+    // 【重要修改】禁用全局 transition，仅对特定交互属性启用过渡
+    // 避免在主题切换动画过程中出现颜色延迟滞后
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease,
+      box-shadow 0.15s ease,
+      transform 0.1s ease;
 
     // 5. 状态反馈
     &:hover {
-      background-color: var(--sb-primary);
-      border-color: var(--sb-primary);
-      color: var(--sb-text-white);
-      box-shadow: 0 4px 12px rgba(84, 104, 255, 0.3); // 悬停浮起感
+      background-color: var(--sb-primary); //
+      border-color: var(--sb-primary); //
+      color: var(--sb-text-white); //
+      box-shadow: 0 4px 12px rgba(84, 104, 255, 0.3);
     }
 
     &:active {
-      filter: brightness(0.9); // 点击时自动变暗 10%，适配所有背景色
-      transform: scale(0.96);  // 增强点击的物理反馈
+      // 点击反馈保持物理缩放
+      filter: brightness(0.9);
+      transform: scale(0.96);
     }
 
-    // 6. 禁用状态 (对应组件 aria-disabled 属性)
+    // 6. 禁用状态
     &[aria-disabled='true'],
     &:disabled {
       cursor: not-allowed;
-      opacity: 0.5;
-      background-color: var(--sb-bg-dialog) !important; // 禁用时使用对话框背景色
-      border-color: var(--sb-border) !important;
-      color: var(--sb-text-muted) !important;
+      opacity: 0.6;
+      background-color: var(--sb-bg-dialog) !important; // 使用变量
+      border-color: var(--sb-border) !important; // 使用变量
+      color: var(--sb-text-muted) !important; // 使用变量
       transform: none !important;
       box-shadow: none !important;
     }
   }
+
+  // 针对主题切换过程中的优化：当 html 正在执行 ripple 动画时，强制禁用 transition
+  :global(html[style*='--ripple-radius']) .app-btn {
+    transition: none !important;
+  }
 </style>
+

@@ -295,15 +295,18 @@
   .algolia-trigger {
     width: 240px;
     height: 36px;
-    background: var(--sb-border);
+    background: var(--sb-border); // 使用边框色作为背景
     border-radius: 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 12px;
     cursor: pointer;
-    transition: all 0.2s;
     border: 1px solid transparent;
+    // 限制 transition 范围
+    transition:
+      background-color 0.2s,
+      border-color 0.2s;
 
     &:hover {
       background: var(--sb-bg-input);
@@ -329,7 +332,7 @@
       gap: 4px;
       .key {
         background: var(--sb-bg-input);
-        border: 1px solid var(--sb-text-muted);
+        border: 1px solid var(--sb-border);
         border-radius: 4px;
         padding: 0 4px;
         font-size: 11px;
@@ -344,7 +347,7 @@
   .algolia-mask {
     position: fixed;
     inset: 0;
-    background: var(--sb-bg-mask);
+    background: var(--sb-bg-mask); // 引用全局遮罩变量
     display: flex;
     justify-content: center;
     padding-top: 80px;
@@ -355,23 +358,23 @@
   .algolia-dialog {
     width: 600px;
     max-height: 80vh;
-    background: var(--sb-bg-dialog);
+    background: var(--sb-bg-dialog); //
     border-radius: 8px;
-    box-shadow: var(--sb-shadow);
+    box-shadow: var(--sb-shadow); //
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--sb-border);
+    border: 1px solid var(--sb-border); //
   }
 
   // 3. 头部输入框
   .algolia-header {
     height: 64px;
-    background: var(--sb-bg-input);
+    background: var(--sb-bg-input); //
     display: flex;
     align-items: center;
     padding: 0 20px;
-    border-bottom: 2px solid var(--sb-primary);
+    border-bottom: 2px solid var(--sb-primary); //
 
     .input-icon {
       font-size: 22px;
@@ -384,10 +387,10 @@
       border: none;
       outline: none;
       font-size: 18px;
-      color: var(--sb-text-main);
+      color: var(--sb-text-main); //
       background: transparent;
       &::placeholder {
-        color: var(--sb-text-muted);
+        color: var(--sb-text-muted); //
       }
     }
 
@@ -415,33 +418,32 @@
 
       /* 标准属性：Firefox 支持 */
       scrollbar-width: thin;
-      scrollbar-color: var(--sb-scrollbar-thumb) var(--sb-scrollbar-track);
+      scrollbar-color: var(--sb-scrollbar-thumb) var(--sb-scrollbar-track); //
 
       /* Webkit 引擎：Chrome, Safari, Edge 支持 */
       &::-webkit-scrollbar {
-        width: 6px; /* 纵向滚动条宽度 */
+        width: 6px;
       }
 
       &::-webkit-scrollbar-track {
-        background: var(--sb-scrollbar-track);
+        background: var(--sb-scrollbar-track); //
         border-radius: 10px;
       }
 
       &::-webkit-scrollbar-thumb {
-        background: var(--sb-scrollbar-thumb);
+        background: var(--sb-scrollbar-thumb); //
         border-radius: 10px;
-        border: 1px solid var(--sb-scrollbar-track); /* 增加一点边距感 */
+        border: 1px solid var(--sb-scrollbar-track);
 
         &:hover {
-          /* 悬停时稍微变亮或变暗增强反馈 */
-          filter: brightness(1.2);
+          filter: brightness(1.1);
         }
       }
     }
   }
 
   .algolia-item-wrapper {
-    height: 64px; // 必须与虚拟列表 item-size 保持一致
+    height: 64px;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -449,22 +451,22 @@
 
   .algolia-item {
     width: 100%;
-    background: var(--sb-bg-item);
+    background: var(--sb-bg-item); //
     border-radius: 6px;
     height: 56px;
     display: flex;
     align-items: center;
     padding: 0 16px;
-    box-shadow: var(--sb-item-shadow);
+    box-shadow: var(--sb-item-shadow); //
+    overflow: hidden;
+    // 限制 transition，避免主题切换干扰
     transition:
-      background-color 0.2s,
-      box-shadow 0.2s;
-    overflow: hidden; // 确保圆角不被内部背景溢出
+      background-color 0.15s ease,
+      box-shadow 0.15s ease;
 
-    // 选中/激活状态样式驱动
     &.is-active {
       background: var(--sb-primary);
-      box-shadow: 0 4px 12px rgba(84, 104, 255, 0.3);
+      box-shadow: 0 4px 12px rgba(84, 104, 255, 0.4);
 
       .title,
       .desc,
@@ -473,7 +475,7 @@
       }
 
       .enter-icon {
-        opacity: 1; // 使用 opacity 控制显隐，不影响布局
+        opacity: 1;
         color: var(--sb-text-white) !important;
         transform: translateX(0);
       }
@@ -500,10 +502,10 @@
     }
 
     .enter-icon {
-      opacity: 0; // 默认隐藏
+      opacity: 0;
       font-size: 14px;
       color: var(--sb-text-white);
-      transform: translateX(-5px); // 初始微调，增加浮现感
+      transform: translateX(-5px);
       transition: all 0.2s ease;
     }
   }
@@ -511,7 +513,7 @@
   // 5. 底部与空状态
   .algolia-footer {
     height: 44px;
-    background: var(--sb-bg-footer);
+    background: var(--sb-bg-footer); //
     border-top: 1px solid var(--sb-border);
     display: flex;
     align-items: center;
@@ -545,8 +547,19 @@
     font-weight: bold;
   }
 
-  // 处于激活项内的高亮词变为白色
   .is-active .algolia-highlight {
     color: var(--sb-text-white) !important;
+  }
+
+  // ==========================================================================
+  // 主题动画优化：扩散期间强制禁用所有过渡，确保视觉同步
+  // ==========================================================================
+  :global(html[style*='--ripple-radius']) & {
+    *,
+    .algolia-trigger,
+    .algolia-item,
+    .enter-icon {
+      transition: none !important;
+    }
   }
 </style>
