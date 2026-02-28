@@ -1,83 +1,146 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import { computed, type PropType } from 'vue';
+
+  type ButtonType = 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'default';
+  type ButtonNativeType = 'button' | 'submit' | 'reset';
+  type ButtonSize = 'large' | 'normal' | 'small';
+
+  const props = defineProps({
+    type: { type: String as PropType<ButtonType>, default: 'default' },
+    size: { type: String as PropType<ButtonSize>, default: 'normal' },
+    nativeType: { type: String as PropType<ButtonNativeType>, default: 'button' },
+    disabled: Boolean,
+    loading: Boolean,
+    plain: Boolean,
+    round: Boolean,
+    circle: Boolean,
+  });
+
+  const btnKlass = computed(() => [
+    'el-btn-custom',
+    `el-btn-custom--${props.type}`,
+    `el-btn-custom--${props.size}`,
+    {
+      'is-disabled': props.disabled || props.loading,
+      'is-loading': props.loading,
+      'is-plain': props.plain,
+      'is-round': props.round,
+      'is-circle': props.circle,
+    },
+  ]);
+</script>
+
 <template>
   <button
-    type="button"
-    aria-disabled="false"
-    class="app-btn"
+    :type="props.nativeType"
+    :disabled="props.disabled || props.loading"
+    :class="btnKlass"
   >
-    <slot></slot>
+    <template v-if="props.loading">
+      <div class="loading-box"><i-ep-loading /></div>
+    </template>
+    <span
+      v-if="$slots.default"
+      class="btn-content"
+    >
+      <slot></slot>
+    </span>
   </button>
 </template>
+
 <style lang="less" scoped>
-  .app-btn {
-    // 1. 布局与尺寸
+  .el-btn-custom {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    padding: 0 15px;
-    height: 32px;
-    min-width: 64px;
-
-    // 2. 文本属性
-    color: var(--sb-text-main); // 引用全局变量
-    font-size: 14px;
-    font-weight: 500;
     line-height: 1;
-    white-space: nowrap;
-    text-align: center;
-
-    // 3. 装饰属性
-    background-color: var(--sb-bg-item); // 引用全局变量
-    border: 1px solid var(--sb-border); // 引用全局变量
-    border-radius: 4px;
-    box-sizing: border-box;
-
-    // 4. 交互控制
     cursor: pointer;
-    outline: none;
-    appearance: none;
-    user-select: none;
-    vertical-align: middle;
+    background-color: var(--sb-bg-item);
+    border: 1px solid var(--sb-border);
+    color: var(--sb-text-main);
+    transition: 0.15s;
+    font-weight: 500;
+    border-radius: 4px;
 
-    // 【重要修改】禁用全局 transition，仅对特定交互属性启用过渡
-    // 避免在主题切换动画过程中出现颜色延迟滞后
-    transition:
-      background-color 0.15s ease,
-      border-color 0.15s ease,
-      color 0.15s ease,
-      box-shadow 0.15s ease,
-      transform 0.1s ease;
+    /* 类型与 Plain 组合样式：通过嵌套提升优先级 */
+    .generate-type-style(@type) {
+      @var-name: ~'--sb-@{type}';
+      @bg-light: ~'--sb-@{type}-light';
 
-    // 5. 状态反馈
-    &:hover {
-      background-color: var(--sb-primary); //
-      border-color: var(--sb-primary); //
-      color: var(--sb-text-white); //
-      box-shadow: 0 4px 12px rgba(84, 104, 255, 0.3);
+      &--@{type} {
+        background-color: var(@var-name);
+        border-color: var(@var-name);
+        color: var(--sb-text-white);
+
+        &.is-plain {
+          background-color: var(@bg-light);
+          border-color: var(@var-name);
+          color: var(@var-name);
+
+          &:hover:not(.is-disabled) {
+            background-color: var(@var-name);
+            color: var(--sb-text-white);
+          }
+        }
+      }
     }
 
-    &:active {
-      // 点击反馈保持物理缩放
-      filter: brightness(0.9);
-      transform: scale(0.96);
+    /* 应用样式 */
+    .generate-type-style(primary);
+    .generate-type-style(success);
+    .generate-type-style(warning);
+    .generate-type-style(danger);
+    .generate-type-style(info);
+
+    &--default.is-plain:hover:not(.is-disabled) {
+      color: var(--sb-primary);
+      border-color: var(--sb-primary);
     }
 
-    // 6. 禁用状态
-    &[aria-disabled='true'],
-    &:disabled {
+    /* 尺寸适配 */
+    &--large {
+      height: 40px;
+      padding: 12px 20px;
+    }
+    &--normal {
+      height: 32px;
+      padding: 8px 15px;
+    }
+    &--small {
+      height: 24px;
+      padding: 5px 11px;
+      font-size: 12px;
+    }
+
+    /* 状态控制 */
+    &.is-disabled {
       cursor: not-allowed;
-      opacity: 0.6;
-      background-color: var(--sb-bg-dialog) !important; // 使用变量
-      border-color: var(--sb-border) !important; // 使用变量
-      color: var(--sb-text-muted) !important; // 使用变量
+      opacity: 0.5;
       transform: none !important;
-      box-shadow: none !important;
+    }
+    &:active:not(.is-disabled) {
+      transform: scale(0.97);
+    }
+
+    .loading-box {
+      margin-right: 6px;
+      svg {
+        animation: rotating 2s linear infinite;
+      }
     }
   }
 
-  // 针对主题切换过程中的优化：当 html 正在执行 ripple 动画时，强制禁用 transition
-  :global(html[style*='--ripple-radius']) .app-btn {
+  @keyframes rotating {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* 解决切换主题时的颜色滞后问题 */
+  :global(html[style*='--ripple-radius']) .el-btn-custom {
     transition: none !important;
   }
 </style>
-

@@ -17,9 +17,15 @@
   --sb-text-muted: #969faf;
   --sb-text-white: #ffffff;
 
-  /* 品牌与装饰 */
-  --sb-primary: #5468ff;
-  --sb-border: #ebedf0;
+  /* 品牌色与状态色 (适配按钮组件) */
+  --sb-primary: #5468ff;   /* */
+  --sb-success: #67c23a;   /* 对应 el-btn-custom--success */
+  --sb-warning: #e6a23c;   /* 对应 el-btn-custom--warning */
+  --sb-danger: #f56c6c;    /* 对应 el-btn-custom--danger */
+  --sb-info: #909399;      /* 对应 el-btn-custom--info */
+  
+  /* 边框与装饰 */
+  --sb-border: #ebedf0;    /* */
   --sb-btn-ball: #ffffff;
 
   /* 阴影与装饰 */
@@ -34,7 +40,7 @@
   --ripple-y: 0px;
 }
 
-/* 黑夜模式变量覆盖 */
+/* 黑夜模式变量覆盖 (改造后) */
 [data-theme='dark'] {
   --sb-bg-layout: #1a1a1b;
   --sb-bg-item: #2f3031;
@@ -45,6 +51,13 @@
 
   --sb-text-main: #e3e3e3;
   --sb-text-muted: #a0a0a0;
+
+  /* 黑夜模式状态色微调：降低饱和度，提高亮度以增强对比度 */
+  --sb-primary: #7384ff;
+  --sb-success: #85ce61;
+  --sb-warning: #ebb563;
+  --sb-danger: #f78989;
+  --sb-info: #a6a9ad;
 
   --sb-border: #3e3f41;
   --sb-btn-ball: #333333;
