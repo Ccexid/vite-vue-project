@@ -59,16 +59,46 @@
       <AppBtn nativeType="submit">提交按钮</AppBtn>
       <AppBtn nativeType="reset">重置按钮</AppBtn>
       <AppBtn plain>朴素按钮</AppBtn>
-      <AppBtn type="primary" plain>朴素按钮</AppBtn>
-      <AppBtn type="success" plain>朴素按钮</AppBtn>
-      <AppBtn type="warning" plain>朴素按钮</AppBtn>
-      <AppBtn type="danger" plain>朴素按钮</AppBtn>
-      <AppBtn type="info" plain>朴素按钮</AppBtn>
+      <AppBtn
+        type="primary"
+        plain
+      >
+        朴素按钮
+      </AppBtn>
+      <AppBtn
+        type="success"
+        plain
+      >
+        朴素按钮
+      </AppBtn>
+      <AppBtn
+        type="warning"
+        plain
+      >
+        朴素按钮
+      </AppBtn>
+      <AppBtn
+        type="danger"
+        plain
+      >
+        朴素按钮
+      </AppBtn>
+      <AppBtn
+        type="info"
+        plain
+      >
+        朴素按钮
+      </AppBtn>
       <AppBtn circle>
         <IEpSearch />
       </AppBtn>
       <AppBtn round>圆角按钮</AppBtn>
     </div>
+    <ul>
+      <li v-for="type in 100" :key="type">
+        {{ type }} 按钮
+      </li>
+    </ul>
     <DarkCheckBox />
     <RouterLink to="/404">Go to 404</RouterLink>
   </div>
