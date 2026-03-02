@@ -13,6 +13,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppBtn: typeof import('./../components/app-btn/index.vue')['default']
     DarkCheckBox: typeof import('./../components/dark-check-box/index.vue')['default']
+    IClarityLanguageLine: typeof import('~icons/clarity/language-line')['default']
     IEpArrowDown: typeof import('~icons/ep/arrow-down')['default']
     IEpArrowRight: typeof import('~icons/ep/arrow-right')['default']
     IEpCheck: typeof import('~icons/ep/check')['default']
@@ -29,6 +30,8 @@ declare module 'vue' {
     IEpSearch: typeof import('~icons/ep/search')['default']
     IEpSearchFolder: typeof import('~icons/ep/search-folder')['default']
     IEpSunny: typeof import('~icons/ep/sunny')['default']
+    IIcBaselineLanguage: typeof import('~icons/ic/baseline-language')['default']
+    LangSelect: typeof import('./../components/lang-select/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchBox: typeof import('./../components/search-box/index.vue')['default']

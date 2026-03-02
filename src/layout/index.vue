@@ -1,61 +1,29 @@
 <script setup lang="ts">
+  import { watch } from 'vue';
+  import { useRoute } from 'vue-router';
   import { useStorage } from '@vueuse/core';
   import { useI18n } from 'vue-i18n';
   import AppAside from '@/layout/components/app-aside/index.vue';
-  import { onClickOutside } from '@vueuse/core';
 
   const route = useRoute();
   const { locale, t } = useI18n();
-  const savedLocale = useStorage('selected-lang', 'zh-CN');
-
-  // 控制下拉菜单显示状态
-  const isLangMenuOpen = ref(false);
-  const langMenuRef = ref(null);
 
   const isCollapsed = useStorage('sidebar-collapsed', false);
   const toggleAside = () => {
     isCollapsed.value = !isCollapsed.value;
   };
 
-  // 语言选项配置
-  const langOptions = [
-    { label: '简体中文', value: 'zh-CN', icon: '中' },
-    { label: 'English', value: 'en', icon: 'En' },
-  ];
-
-  // 切换语言逻辑
-  const handleSetLanguage = (lang: string) => {
-    locale.value = lang;
-    savedLocale.value = lang;
-    isLangMenuOpen.value = false;
-  };
-
+  // 标题实时同步逻辑
   const updateTitle = () => {
-    const titleKey = route.meta?.title as string; //
-    if (titleKey) {
-      document.title = t(titleKey); //
-    }
+    const titleKey = route.meta?.title as string;
+    if (titleKey) document.title = t(titleKey);
   };
 
-  watch(
-    locale,
-    () => {
-      updateTitle(); //
-    },
-    { immediate: true },
-  );
-
+  watch(locale, () => updateTitle(), { immediate: true });
   watch(
     () => route.path,
-    () => {
-      updateTitle(); //
-    },
+    () => updateTitle(),
   );
-
-  // 点击外部关闭下拉菜单
-  onClickOutside(langMenuRef, () => {
-    isLangMenuOpen.value = false;
-  });
 </script>
 
 <template>
@@ -74,45 +42,7 @@
         <div class="header-right">
           <slot name="header-right">
             <div class="header-actions">
-              <div
-                class="lang-selector"
-                ref="langMenuRef"
-              >
-                <div
-                  class="lang-trigger"
-                  @click="isLangMenuOpen = !isLangMenuOpen"
-                  :class="{ 'is-active': isLangMenuOpen }"
-                >
-                  <i-ep-guide class="lang-icon" />
-                  <span class="current-lang">{{ locale === 'zh-CN' ? '中文' : 'EN' }}</span>
-                  <i-ep-arrow-down
-                    class="arrow-icon"
-                    :class="{ rotate: isLangMenuOpen }"
-                  />
-                </div>
-
-                <transition name="slide-up">
-                  <div
-                    v-if="isLangMenuOpen"
-                    class="lang-dropdown"
-                  >
-                    <div
-                      v-for="item in langOptions"
-                      :key="item.value"
-                      class="lang-item"
-                      :class="{ 'is-selected': locale === item.value }"
-                      @click="handleSetLanguage(item.value)"
-                    >
-                      <span class="lang-label">{{ item.label }}</span>
-                      <i-ep-check
-                        v-if="locale === item.value"
-                        class="check-icon"
-                      />
-                    </div>
-                  </div>
-                </transition>
-              </div>
-
+              <LangSelect />
               <DarkCheckBox />
             </div>
           </slot>
@@ -128,10 +58,6 @@
             <component :is="Component" />
           </transition>
         </router-view>
-
-        <footer class="app-footer">
-          <p>© 2024 Your Company. All rights reserved.</p>
-        </footer>
       </main>
     </section>
   </section>
