@@ -94,12 +94,6 @@
       </AppBtn>
       <AppBtn round>圆角按钮</AppBtn>
     </div>
-    <!-- <ul>
-      <li v-for="type in 100" :key="type">
-        {{ type }} 按钮
-      </li>
-    </ul> -->
-    <DarkCheckBox />
     <RouterLink to="/404">Go to 404</RouterLink>
   </div>
 </template>

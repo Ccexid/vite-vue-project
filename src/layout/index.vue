@@ -14,7 +14,9 @@
     <section class="app-layout-container">
       <header class="app-layout-header">
         <slot name="header-left"></slot>
-        <slot name="header-right"></slot>
+        <slot name="header-right">
+          <DarkCheckBox />
+        </slot>
       </header>
 
       <main class="app-main">
