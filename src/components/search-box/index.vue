@@ -4,13 +4,14 @@
   import { RecycleScroller } from 'vue-virtual-scroller';
   import { onClickOutside, useEventListener, useFocus, useScrollLock } from '@vueuse/core';
   import type { SearchItem } from '@/types/search-box';
-
+  import { useI18n } from 'vue-i18n';
 
   // ===================== 状态与 Refs =====================
   const isModalOpen = ref(false);
   const searchQuery = ref('');
   const activeIndex = ref(0);
   const isKeyboardMode = ref(false); // 【新增】标记是否处于键盘操作模式
+  const { t } = useI18n();
 
   const dialogRef = ref<HTMLDivElement | null>(null);
   const maskRef = ref<HTMLDivElement | null>(null);
@@ -28,7 +29,7 @@
     },
     placeholder: {
       type: String,
-      default: '搜索文档或资源...',
+      default: '',
     },
     teleportTo: {
       type: String,
@@ -198,7 +199,7 @@
   >
     <div class="left">
       <i-ep-search class="search-icon" />
-      <span>{{ placeholder }}</span>
+      <span>{{ placeholder || t('common.searchPlaceholder') }}</span>
     </div>
     <div class="shortcut-hint">
       <span class="key">{{ isMac ? '⌘' : 'Ctrl' }}</span>
@@ -223,7 +224,7 @@
             ref="inputRef"
             :value="searchQuery"
             type="text"
-            :placeholder="placeholder"
+            :placeholder="placeholder || t('common.searchPlaceholder')"
             @input="handleInput"
           />
           <button
@@ -284,22 +285,22 @@
             class="empty-state"
           >
             <i-ep-folder style="font-size: 40px; opacity: 0.3" />
-            <p>没有找到与 "{{ searchQuery }}" 相关的结果</p>
+            <p>{{ t('common.empty', { query: searchQuery }) }}</p>
           </div>
         </div>
 
         <footer class="algolia-footer">
           <div class="footer-item">
             <span class="key-tag">Enter</span>
-            确认
+            {{ t('common.enter') }}
           </div>
           <div class="footer-item">
             <span class="key-tag">↑↓</span>
-            选择
+            {{ t('common.select') }}
           </div>
           <div class="footer-item">
             <span class="key-tag">Esc</span>
-            关闭
+            {{ t('common.close') }}
           </div>
         </footer>
       </div>
