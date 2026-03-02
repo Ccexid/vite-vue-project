@@ -199,7 +199,7 @@
   >
     <div class="left">
       <i-ep-search class="search-icon" />
-      <span>{{ placeholder || t('common.searchPlaceholder') }}</span>
+      <span class="search-placeholder">{{ placeholder || t('common.searchPlaceholder') }}</span>
     </div>
     <div class="shortcut-hint">
       <span class="key">{{ isMac ? '⌘' : 'Ctrl' }}</span>
@@ -321,6 +321,7 @@
     padding: 0 12px;
     cursor: pointer;
     border: 1px solid transparent;
+    gap: 8px;
     transition:
       background-color 0.2s,
       border-color 0.2s;
@@ -336,14 +337,26 @@
       align-items: center;
       color: var(--sb-text-muted);
       font-size: 14px;
+      flex: 1;
+      min-width: 0;
       .search-icon {
         margin-right: 8px;
         font-size: 16px;
+        flex-shrink: 0;
+      }
+
+      .search-placeholder {
+        flex: 1; // 【新增】占满 left 内部空间
+        min-width: 0; // 【关键】允许收缩
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
     .shortcut-hint {
       display: flex;
       gap: 4px;
+      flex-shrink: 0;
       .key {
         background: var(--sb-bg-input);
         border: 1px solid var(--sb-border);
