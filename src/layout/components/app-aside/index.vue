@@ -166,7 +166,7 @@
           font-size: 18px;
           font-weight: 700;
           background: linear-gradient(120deg, var(--sb-primary), #42b883);
-          -webkit-background-clip: text;
+          background-clip: text;
           -webkit-text-fill-color: transparent;
           white-space: nowrap;
           letter-spacing: -0.5px;
