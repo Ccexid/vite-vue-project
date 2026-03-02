@@ -16,6 +16,8 @@ declare module 'vue' {
     IEpArrowRight: typeof import('~icons/ep/arrow-right')['default']
     IEpCircleClose: typeof import('~icons/ep/circle-close')['default']
     IEpDocument: typeof import('~icons/ep/document')['default']
+    IEpExpand: typeof import('~icons/ep/expand')['default']
+    IEpFold: typeof import('~icons/ep/fold')['default']
     IEpFolder: typeof import('~icons/ep/folder')['default']
     IEpLoading: typeof import('~icons/ep/loading')['default']
     IEpMoon: typeof import('~icons/ep/moon')['default']
