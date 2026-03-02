@@ -4,6 +4,7 @@
    1. 基础变量定义
    ========================================================================== */
 :root {
+  --font-main: 'Alibaba PuHuiTi 3.0', -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
   /* 布局与背景 */
   --sb-bg-layout: #ffffff;
   --sb-bg-item: #ffffff;

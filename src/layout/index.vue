@@ -1,14 +1,18 @@
 <script setup lang="ts">
+  import { useStorage } from '@vueuse/core';
   import AppAside from './components/app-aside/index.vue';
 
-  const isCollapsed = ref(false);
+  const isCollapsed = useStorage('sidebar-collapsed', false);
+  const toggleAside = () => {
+    isCollapsed.value = !isCollapsed.value;
+  };
 </script>
 
 <template>
   <section class="app-layout">
     <AppAside
       :is-collapsed="isCollapsed"
-      @toggle="isCollapsed = !isCollapsed"
+      @toggle="toggleAside"
     />
 
     <section class="app-layout-container">
