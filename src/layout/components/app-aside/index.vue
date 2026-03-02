@@ -90,21 +90,6 @@
 
     <div class="aside-content">
       <slot>
-        <div class="menu-list">
-          <div
-            v-for="i in 6"
-            :key="i"
-            class="menu-item"
-          >
-            <i-ep-house class="menu-icon"/>
-            <span
-              v-if="!isCollapsed"
-              class="menu-label"
-            >
-              项目方案 {{ i }}
-            </span>
-          </div>
-        </div>
       </slot>
     </div>
 
