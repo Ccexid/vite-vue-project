@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { useStorage } from '@vueuse/core';
-  import AppAside from './components/app-aside/index.vue';
+  import AppAside from '@/layout/components/app-aside/index.vue';
 
   const isCollapsed = useStorage('sidebar-collapsed', false);
   const toggleAside = () => {
