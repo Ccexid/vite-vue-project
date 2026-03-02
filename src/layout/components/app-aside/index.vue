@@ -96,7 +96,7 @@
             :key="i"
             class="menu-item"
           >
-            <div class="menu-icon"></div>
+            <i-ep-house class="menu-icon"/>
             <span
               v-if="!isCollapsed"
               class="menu-label"
@@ -200,10 +200,6 @@
         }
 
         .menu-icon {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background-color: currentColor;
           flex-shrink: 0;
         }
 
