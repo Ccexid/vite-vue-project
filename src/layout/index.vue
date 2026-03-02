@@ -4,7 +4,8 @@
   import AppAside from '@/layout/components/app-aside/index.vue';
   import { onClickOutside } from '@vueuse/core';
 
-  const { locale } = useI18n();
+  const route = useRoute();
+  const { locale, t } = useI18n();
   const savedLocale = useStorage('selected-lang', 'zh-CN');
 
   // 控制下拉菜单显示状态
@@ -28,6 +29,28 @@
     savedLocale.value = lang;
     isLangMenuOpen.value = false;
   };
+
+  const updateTitle = () => {
+    const titleKey = route.meta?.title as string; //
+    if (titleKey) {
+      document.title = t(titleKey); //
+    }
+  };
+
+  watch(
+    locale,
+    () => {
+      updateTitle(); //
+    },
+    { immediate: true },
+  );
+
+  watch(
+    () => route.path,
+    () => {
+      updateTitle(); //
+    },
+  );
 
   // 点击外部关闭下拉菜单
   onClickOutside(langMenuRef, () => {
