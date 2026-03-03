@@ -432,7 +432,7 @@
     overflow: hidden;
     background: var(--sb-bg-dialog);
     .scroller {
-      height: 500px;
+      height: 100%;
       padding: 0 12px;
       overflow-y: auto !important;
       scrollbar-width: thin;
@@ -478,6 +478,7 @@
     &.is-active {
       background: var(--sb-primary);
       box-shadow: 0 4px 12px rgba(84, 104, 255, 0.4);
+      opacity: 1.1;
       .title,
       .desc,
       .item-icon-box {
