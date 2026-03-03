@@ -1,9 +1,10 @@
+<!-- eslint-disable no-console -->
 <!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
   import type { MenuItem } from '@/types/app-menu';
-import { gsap } from 'gsap';
+  import { gsap } from 'gsap';
   import { useI18n } from 'vue-i18n';
-
+  
   defineOptions({ name: 'AppMenu' });
 
   const props = defineProps({
@@ -14,6 +15,7 @@ import { gsap } from 'gsap';
   });
 
   const { t } = useI18n();
+  const router = useRouter();
   const expandedKeys = ref<Set<string | number>>(new Set());
 
   // 用于 Teleport 的定位和显示状态
@@ -118,7 +120,7 @@ import { gsap } from 'gsap';
           duration: 0.3,
           ease: 'power2.inOut',
           onComplete: () => {
-            expandedKeys.value.delete(item.id)
+            expandedKeys.value.delete(item.id);
           },
         });
       } else {
@@ -130,6 +132,7 @@ import { gsap } from 'gsap';
     } else {
       // 3. 无子节点：执行路由跳转或其他逻辑
       console.log('Navigate to:', item.path);
+      router.push(item.path || '/');
     }
   };
 
@@ -150,9 +153,15 @@ import { gsap } from 'gsap';
         @click="handleItemClick(item, $event)"
       >
         <div class="menu-icon-box">
-          <component :is="item.icon || 'i-ep-menu'" class="menu-icon" />
+          <component
+            :is="item.icon || 'i-ep-menu'"
+            class="menu-icon"
+          />
         </div>
-        <span v-if="!isCollapsed || isFloating" class="menu-label">
+        <span
+          v-if="!isCollapsed || isFloating"
+          class="menu-label"
+        >
           {{ t(item.label) }}
         </span>
         <i-ep-arrow-right
@@ -166,10 +175,17 @@ import { gsap } from 'gsap';
         class="sub-menu-wrapper"
         v-show="expandedKeys.has(item.id)"
       >
-        <AppMenu :items="item.children" :is-collapsed="false" :indent="indent" />
+        <AppMenu
+          :items="item.children"
+          :is-collapsed="false"
+          :indent="indent"
+        />
       </div>
 
-      <Teleport to="body" v-if="item.children && isCollapsed && !isFloating && activeItemId === item.id">
+      <Teleport
+        to="body"
+        v-if="item.children && isCollapsed && !isFloating && activeItemId === item.id"
+      >
         <div
           :class="['collapsed-popup', `popup-${item.id}`]"
           :style="popupStyle"
@@ -178,7 +194,12 @@ import { gsap } from 'gsap';
         >
           <div class="popup-inner">
             <div class="popup-header">{{ t(item.label) }}</div>
-            <AppMenu :items="item.children" :is-collapsed="false" :is-floating="true" :indent="12" />
+            <AppMenu
+              :items="item.children"
+              :is-collapsed="false"
+              :is-floating="true"
+              :indent="12"
+            />
           </div>
         </div>
       </Teleport>
@@ -222,12 +243,17 @@ import { gsap } from 'gsap';
       .arrow-icon {
         font-size: 12px;
         transition: transform 0.3s ease;
-        &.is-rotated { transform: rotate(90deg); }
+        &.is-rotated {
+          transform: rotate(90deg);
+        }
       }
     }
 
     &.is-collapsed:not(.is-floating) {
-      .menu-item { justify-content: center; padding: 0; }
+      .menu-item {
+        justify-content: center;
+        padding: 0;
+      }
     }
   }
 
@@ -255,5 +281,7 @@ import { gsap } from 'gsap';
     }
   }
 
-  .sub-menu-wrapper { overflow: hidden; }
+  .sub-menu-wrapper {
+    overflow: hidden;
+  }
 </style>

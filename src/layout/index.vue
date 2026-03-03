@@ -19,11 +19,21 @@
       label: 'route.dashboard',
       icon: IEpHouse,
       children: [
-        { id: 11, label: 'route.dashboardOverview', icon: IEpDocument },
-        { id: 12, label: 'route.dashboardAnalysis', icon: IEpPieChart },
+        {
+          id: 11,
+          label: 'route.dashboardOverview',
+          icon: IEpDocument,
+          path: '/',
+        },
+        {
+          id: 12,
+          label: 'route.dashboardAnalysis',
+          icon: IEpPieChart,
+          path: '/',
+        },
       ],
     },
-    { id: 2, label: 'route.scheme', icon: IEpFiles },
+    { id: 2, label: 'route.scheme', icon: IEpFiles, path: '/404' },
   ];
 
   const isCollapsed = useStorage('sidebar-collapsed', false);
