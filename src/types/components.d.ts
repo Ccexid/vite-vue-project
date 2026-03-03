@@ -34,8 +34,13 @@ declare module 'vue' {
     IEpSunny: typeof import('~icons/ep/sunny')['default']
     IIcBaselineLanguage: typeof import('~icons/ic/baseline-language')['default']
     LangSelect: typeof import('./../components/lang-select/index.vue')['default']
+    NConfigProvider: typeof import('naive-ui')['NConfigProvider']
+    NGlobalStyle: typeof import('naive-ui')['NGlobalStyle']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchBox: typeof import('./../components/search-box/index.vue')['default']
+    SplitterGroup: typeof import('reka-ui')['SplitterGroup']
+    SplitterPanel: typeof import('reka-ui')['SplitterPanel']
+    SplitterResizeHandle: typeof import('reka-ui')['SplitterResizeHandle']
   }
 }

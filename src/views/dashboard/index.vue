@@ -1,6 +1,4 @@
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="dashboard-container">
@@ -54,7 +52,6 @@
       </AppBtn>
       <AppBtn round>圆角按钮</AppBtn>
     </div>
-    <RouterLink to="/404">Go to 404</RouterLink>
   </div>
 </template>
 

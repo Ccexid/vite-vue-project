@@ -1,22 +1,7 @@
 <script setup lang="ts">
+import type { AppBtnProps } from '@/types/app-btn';
+
   // 引入 Reka UI 的基础原始组件
-  import { Primitive, type PrimitiveProps } from 'reka-ui';
-
-  type ButtonType = 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'default';
-  type ButtonNativeType = 'button' | 'submit' | 'reset';
-  type ButtonSize = 'large' | 'normal' | 'small';
-
-  // 扩展 props，支持 Reka UI 的 asChild 模式
-  interface AppBtnProps extends PrimitiveProps {
-    type?: ButtonType;
-    size?: ButtonSize;
-    nativeType?: ButtonNativeType;
-    disabled?: boolean;
-    loading?: boolean;
-    plain?: boolean;
-    round?: boolean;
-    circle?: boolean;
-  }
 
   const props = withDefaults(defineProps<AppBtnProps>(), {
     as: 'button', // 默认作为 button 渲染
@@ -40,11 +25,10 @@
 </script>
 
 <template>
-  <Primitive
-    :as="as"
-    :as-child="asChild"
-    :type="as === 'button' ? nativeType : undefined"
-    :disabled="disabled || loading ? '' : undefined"
+  <button
+    :type="nativeType"
+    :aria-disabled="disabled || loading"
+    :disabled="disabled || loading"
     :class="btnKlass"
     aria-label="button"
   >
@@ -58,7 +42,7 @@
     >
       <slot></slot>
     </span>
-  </Primitive>
+  </button>
 </template>
 
 <style lang="less" scoped>

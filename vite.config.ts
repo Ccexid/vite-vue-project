@@ -7,7 +7,7 @@ import Components from 'unplugin-vue-components/vite';
 import legacy from '@vitejs/plugin-legacy';
 import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite';
-import RekaResolver from 'reka-ui/resolver';
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -15,12 +15,19 @@ export default defineConfig({
     vue(),
     checker({ typescript: true, vueTsc: true }),
     AutoImport({
-      imports: ['vue', 'vue-router', 'pinia'],
+      imports: ['vue', 'vue-router', 'pinia', {
+        'naive-ui': [
+          'useDialog',
+          'useMessage',
+          'useNotification',
+          'useLoadingBar'
+        ]
+      }],
       dts: 'src/types/auto-imports.d.ts',
     }),
     Components({
       dts: 'src/types/components.d.ts',
-      resolvers: [IconsResolver(), RekaResolver()],
+      resolvers: [IconsResolver(), NaiveUiResolver()],
     }),
     legacy({
       targets: ['defaults', 'not IE 11'],
