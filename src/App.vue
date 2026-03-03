@@ -32,6 +32,7 @@
   const themeOverrides: GlobalThemeOverrides = {
     common: {
       primaryColor: '#5468ff', // 对应 --sb-primary
+      primaryColorHover: '#4a5cd3', // 对应 --sb-primary-hover
       fontFamily: "'Alibaba PuHuiTi 3.0', sans-serif", // 对应 fonts.css
       borderRadius: '8px',
     },
@@ -54,12 +55,10 @@
 
     <RouterView v-slot="{ Component, route }">
       <Transition :name="route.meta.transition || 'fade'">
-        <keep-alive>
-          <component
-            :is="Component"
-            :key="route.fullPath"
-          />
-        </keep-alive>
+        <component
+          :is="Component"
+          :key="route.fullPath"
+        />
       </Transition>
     </RouterView>
   </NConfigProvider>
