@@ -27,5 +27,9 @@ dist-ssr
 .history/*
 
 # auto generate files
+components.d.ts
+auto-imports.d.ts
 */components.d.ts
 */auto-imports.d.ts
+*/types/components.d.ts
+*/types/auto-imports.d.ts
