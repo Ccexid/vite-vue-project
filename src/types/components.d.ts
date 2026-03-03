@@ -16,6 +16,7 @@ declare module 'vue' {
     IClarityLanguageLine: typeof import('~icons/clarity/language-line')['default']
     IEpArrowDown: typeof import('~icons/ep/arrow-down')['default']
     IEpArrowRight: typeof import('~icons/ep/arrow-right')['default']
+    IEpBack: typeof import('~icons/ep/back')['default']
     IEpCheck: typeof import('~icons/ep/check')['default']
     IEpCircleClose: typeof import('~icons/ep/circle-close')['default']
     IEpDocument: typeof import('~icons/ep/document')['default']
