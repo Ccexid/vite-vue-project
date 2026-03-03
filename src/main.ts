@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import 'virtual:uno.css'
 import '@/styles/index.less';
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import App from './App.vue';

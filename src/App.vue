@@ -46,6 +46,7 @@
 
 <template>
   <NConfigProvider
+    class="w-full h-full"
     :theme="activeTheme"
     :theme-overrides="themeOverrides"
     :locale="currentLocale"

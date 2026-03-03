@@ -7,7 +7,8 @@ import Components from 'unplugin-vue-components/vite';
 import legacy from '@vitejs/plugin-legacy';
 import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite';
-import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
+import UnoCSS from 'unocss/vite';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -37,6 +38,7 @@ export default defineConfig({
       compiler: 'vue3',
       scale: 1,
     }),
+    UnoCSS(),
   ],
   resolve: {
     alias: {
