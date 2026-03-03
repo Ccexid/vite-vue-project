@@ -11,7 +11,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AppBtn: typeof import('./../components/app-btn/index.vue')['default']
     DarkCheckBox: typeof import('./../components/dark-check-box/index.vue')['default']
     IClarityLanguageLine: typeof import('~icons/clarity/language-line')['default']
     IEpArrowDown: typeof import('~icons/ep/arrow-down')['default']
@@ -34,13 +33,12 @@ declare module 'vue' {
     IEpSunny: typeof import('~icons/ep/sunny')['default']
     IIcBaselineLanguage: typeof import('~icons/ic/baseline-language')['default']
     LangSelect: typeof import('./../components/lang-select/index.vue')['default']
+    NBtn: typeof import('naive-ui')['NBtn']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
     NGlobalStyle: typeof import('naive-ui')['NGlobalStyle']
+    NTag: typeof import('naive-ui')['NTag']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchBox: typeof import('./../components/search-box/index.vue')['default']
-    SplitterGroup: typeof import('reka-ui')['SplitterGroup']
-    SplitterPanel: typeof import('reka-ui')['SplitterPanel']
-    SplitterResizeHandle: typeof import('reka-ui')['SplitterResizeHandle']
   }
 }
