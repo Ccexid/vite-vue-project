@@ -72,15 +72,7 @@
         :title="isCollapsed ? t(item.label) : ''"
       >
         <div class="menu-icon-box">
-          <component
-            v-if="item.icon"
-            :is="item.icon || 'i-ep-menu'"
-            class="menu-icon"
-          />
-          <i-ep-menu
-            v-else
-            class="menu-icon"
-          />
+          <component :is="item.icon || 'i-ep-menu'" class="menu-icon" />
         </div>
 
         <transition name="fade">

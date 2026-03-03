@@ -5,6 +5,10 @@
   import { useI18n } from 'vue-i18n';
   import AppAside from '@/layout/components/app-aside/index.vue';
   import AppMenu from '@/layout/components/app-menu/index.vue';
+  import IEpHouse from '~icons/ep/house';
+  import IEpDocument from '~icons/ep/document';
+  import IEpPieChart from '~icons/ep/pie-chart';
+  import IEpFiles from '~icons/ep/files';
 
   const route = useRoute();
   const { locale, t } = useI18n();
@@ -13,13 +17,13 @@
     {
       id: 1,
       label: 'route.dashboard',
-      icon: 'IEpHouse',
+      icon: IEpHouse,
       children: [
-        { id: 11, label: 'route.dashboardOverview', icon: 'IEpDocument' },
-        { id: 12, label: 'route.dashboardAnalysis', icon: 'IEpPieChart' },
+        { id: 11, label: 'route.dashboardOverview', icon: IEpDocument },
+        { id: 12, label: 'route.dashboardAnalysis', icon: IEpPieChart },
       ],
     },
-    { id: 2, label: 'route.scheme', icon: 'i-ep-files' },
+    { id: 2, label: 'route.scheme', icon: IEpFiles },
   ];
 
   const isCollapsed = useStorage('sidebar-collapsed', false);
