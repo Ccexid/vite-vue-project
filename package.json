@@ -13,6 +13,7 @@
     "@vueuse/core": "^14.2.1",
     "gsap": "^3.14.2",
     "lodash-es": "^4.17.23",
+    "reka-ui": "^2.8.2",
     "vue": "^3.5.25",
     "vue-i18n": "11",
     "vue-router": "4",

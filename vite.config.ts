@@ -7,6 +7,7 @@ import Components from 'unplugin-vue-components/vite';
 import legacy from '@vitejs/plugin-legacy';
 import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite';
+import RekaResolver from 'reka-ui/resolver';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -19,7 +20,7 @@ export default defineConfig({
     }),
     Components({
       dts: 'src/types/components.d.ts',
-      resolvers: [IconsResolver()]
+      resolvers: [IconsResolver(), RekaResolver()],
     }),
     legacy({
       targets: ['defaults', 'not IE 11'],
