@@ -3,28 +3,66 @@
   import { useStorage } from '@vueuse/core';
   import { useI18n } from 'vue-i18n';
 
-  // 导入你的业务组件
+  // 导入业务组件
   import AppAside from '@/layout/components/app-aside/index.vue';
-  import { watch } from 'vue';
+
+  // 导入图标 (假设你使用 unplugin-icons)
+  import IEpHouse from '~icons/ep/house';
+  import IEpSetting from '~icons/ep/setting';
+  import type { MenuOption } from 'naive-ui';
 
   const route = useRoute();
   const { locale, t } = useI18n();
 
-  // 1. 侧边栏折叠状态 (继续使用 useStorage 保持持久化)
+  // 1. 状态管理
   const isCollapsed = useStorage('sidebar-collapsed', false);
+  const activeKey = ref<string>((route.name as string) || 'dashboard');
 
-  // 3. 标题同步逻辑 (保留)
+  // 2. 菜单配置 (Tree 类型)
+  const menuOptions: MenuOption[] = [
+    {
+      label: () => t('route.dashboard'),
+      key: 'dashboard',
+      icon: () => h(IEpHouse),
+      children: [
+        {
+          label: () => t('route.dashboardOverview'),
+          icon: () => h(IEpHouse),
+          key: 'dashboard-overview',
+        },
+        {
+          label: () => t('route.dashboardAnalysis'),
+          icon: () => h(IEpSetting),
+          key: 'dashboard-analysis',
+        },
+      ],
+    },
+    {
+      label: () => t('route.scheme'),
+      key: 'scheme',
+      icon: () => h(IEpSetting),
+    },
+  ];
+
+  // 3. 页面标题同步
   const updateTitle = () => {
     const titleKey = route.meta?.title as string;
     if (titleKey) document.title = t(titleKey);
   };
-  watch([locale, () => route.path], () => updateTitle(), { immediate: true });
+  watch(
+    [locale, () => route.path],
+    () => {
+      updateTitle();
+      activeKey.value = (route.name as string) || 'dashboard';
+    },
+    { immediate: true },
+  );
 </script>
 
 <template>
   <n-layout
     has-sider
-    class="h-full w-full"
+    class="h-full w-full overflow-hidden"
   >
     <n-layout-sider
       bordered
@@ -32,25 +70,17 @@
       :collapsed-width="64"
       :width="240"
       :collapsed="isCollapsed"
-      show-trigger
-      @collapse="isCollapsed = true"
-      @expand="isCollapsed = false"
       class="bg-[var(--sb-bg-item)]! border-r-[var(--sb-border)]!"
     >
-      <div class="h-full flex flex-col">
-        <div class="h-60px flex items-center justify-center border-b border-[var(--sb-border)]">
-          <div class="w-32px h-32px bg-[var(--sb-primary)] rounded-8px" />
-        </div>
-
-        <div class="flex-1 overflow-y-auto">
-          <slot name="aside">
-            <AppAside :is-collapsed="isCollapsed" />
-          </slot>
-        </div>
-      </div>
+      <AppAside
+        :is-collapsed="isCollapsed"
+        :menu-options="menuOptions"
+        v-model:active-key="activeKey"
+        @toggle="isCollapsed = !isCollapsed"
+      />
     </n-layout-sider>
 
-    <n-layout>
+    <n-layout class="bg-[var(--sb-bg-layout)]!">
       <n-layout-header
         bordered
         class="h-60px px-20px flex items-center justify-between bg-[var(--sb-bg-item)]! border-b-[var(--sb-border)]!"
@@ -72,6 +102,7 @@
       <n-layout-content
         content-style="padding: 20px;"
         class="bg-[var(--sb-bg-layout)]!"
+        :native-scrollbar="false"
       >
         <router-view v-slot="{ Component }">
           <transition
@@ -87,7 +118,6 @@
 </template>
 
 <style lang="less" scoped>
-  // 路由过渡动画保持不变
   .fade-transform-enter-active,
   .fade-transform-leave-active {
     transition: all 0.3s ease;
@@ -99,5 +129,15 @@
   .fade-transform-leave-to {
     opacity: 0;
     transform: translateX(15px);
+  }
+
+  /* 配合全局暗黑模式 GSAP 裁剪动画 */
+  :global(html[style*='--ripple-radius']) {
+    .n-layout,
+    .n-layout-sider,
+    .n-layout-header,
+    .n-layout-content {
+      transition: none !important;
+    }
   }
 </style>

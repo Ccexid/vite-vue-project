@@ -1,231 +1,127 @@
 <script setup lang="ts">
-  import gsap from 'gsap';
+  import { computed } from 'vue';
+  import { NMenu, type MenuOption } from 'naive-ui';
 
-  const props = defineProps({
-    isCollapsed: {
-      type: Boolean,
-      default: false,
-    },
+  interface Props {
+    isCollapsed: boolean;
+    menuOptions: MenuOption[];
+    activeKey: string;
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    isCollapsed: false,
+    menuOptions: () => [],
+    activeKey: '',
   });
 
-  const emit = defineEmits(['toggle']);
+  const emit = defineEmits(['toggle', 'update:activeKey']);
 
-  const asideRef = ref<HTMLElement | null>(null);
-  const logoTextRef = ref<HTMLElement | null>(null);
-  const logoIconRef = ref<HTMLElement | null>(null);
+  // 响应式处理折叠状态
+  const collapsed = computed(() => props.isCollapsed);
 
-  /**
-   * 核心动画逻辑
-   */
-  const runAnimation = (collapsed: boolean, isInit = false) => {
-    if (!asideRef.value) return;
-
-    const duration = isInit ? 0 : 0.6;
-    const ease = 'back.out(1.5)';
-
-    // 1. 侧边栏宽度动画
-    gsap.to(asideRef.value, {
-      width: collapsed ? 64 : 240,
-      duration,
-      ease,
-      overwrite: 'auto',
-    });
-
-    // 2. Logo 文字动画：位移 + 透明度 + 缩放
-    if (logoTextRef.value) {
-      gsap.to(logoTextRef.value, {
-        x: collapsed ? -20 : 0,
-        opacity: collapsed ? 0 : 1,
-        scale: collapsed ? 0.8 : 1,
-        duration: duration * 0.8,
-        ease: collapsed ? 'power2.in' : 'back.out(1.2)',
-      });
-    }
-
-    // 3. Logo 图标动画：稍微放大增强视觉重心
-    if (logoIconRef.value) {
-      gsap.to(logoIconRef.value, {
-        scale: collapsed ? 1.2 : 1,
-        duration,
-        ease,
-      });
-    }
+  // 菜单更新回调
+  const handleUpdateValue = (key: string, item: MenuOption) => {
+    emit('update:activeKey', key, item);
   };
-
-  watch(
-    () => props.isCollapsed,
-    (val) => runAnimation(val),
-  );
-
-  onMounted(() => {
-    // 初始化状态
-    runAnimation(props.isCollapsed, true);
-  });
 </script>
 
 <template>
-  <aside
-    ref="asideRef"
-    class="app-layout-aside"
-  >
-    <div class="aside-header">
-      <div class="logo-wrapper">
-        <div
-          ref="logoIconRef"
-          class="logo-icon"
-        >
+  <div class="aside-inner-wrapper flex flex-col h-full overflow-hidden">
+    <div class="aside-header flex items-center h-72px px-16px flex-shrink-0">
+      <div class="logo-wrapper flex items-center gap-12px">
+        <div class="logo-icon w-32px h-32px flex-shrink-0">
           <img
             src="@/assets/vue.svg"
             alt="logo"
+            class="w-full h-full"
           />
         </div>
-        <span
-          ref="logoTextRef"
-          class="logo-text"
-        >
-          Gemini Admin
-        </span>
+        <Transition name="fade-fast">
+          <span
+            v-if="!collapsed"
+            class="logo-text text-18px font-700 whitespace-nowrap overflow-hidden"
+          >
+            Gemini Admin
+          </span>
+        </Transition>
       </div>
     </div>
 
-    <div class="aside-content">
-      <slot>
-      </slot>
+    <div class="aside-content flex-1 overflow-y-auto px-4px">
+      <n-menu
+        :value="activeKey"
+        :collapsed="collapsed"
+        :collapsed-width="64"
+        :collapsed-icon-size="22"
+        :options="menuOptions"
+        :indent="20"
+        @update:value="handleUpdateValue"
+      />
     </div>
 
-    <div class="aside-footer">
+    <div class="aside-footer p-12px border-t border-[var(--sb-border)] flex-shrink-0">
       <button
-        class="toggle-btn"
+        class="toggle-btn w-full h-40px flex items-center justify-center rounded-8px bg-[var(--sb-bg-layout)] text-[var(--sb-text-main)] hover:bg-[var(--sb-primary)] hover:text-white transition-all duration-300"
         @click="emit('toggle')"
       >
-        <div class="icon-box">
-          <i-ep-fold v-if="!isCollapsed" />
+        <div class="icon-box text-18px">
+          <i-ep-fold v-if="!collapsed" />
           <i-ep-expand v-else />
         </div>
       </button>
     </div>
-  </aside>
+  </div>
 </template>
 
 <style lang="less" scoped>
-  .app-layout-aside {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background-color: var(--sb-bg-item);
-    border-right: 1px solid var(--sb-border);
-    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.02);
-    overflow: hidden;
-    position: relative;
-    z-index: 10;
+  .aside-inner-wrapper {
+    background-color: transparent;
+  }
 
-    .aside-header {
-      height: 72px; // 稍微加高显得更大气
-      display: flex;
-      align-items: center;
-      padding: 0 16px;
-      overflow: hidden;
+  .logo-text {
+    background: linear-gradient(120deg, var(--sb-primary), #42b883);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
 
-      .logo-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        width: 200px; // 保证文字不换行
+  /* 深度适配 Naive UI Tree 菜单样式 */
+  :deep(.n-menu) {
+    // 基础变量绑定自定义 CSS 变量
+    --n-item-color-active: var(--sb-primary-light, #f0f2ff);
+    --n-item-color-active-hover: var(--sb-primary-light, #f0f2ff);
+    --n-item-text-color-active: var(--sb-primary);
+    --n-item-icon-color-active: var(--sb-primary);
+    --n-arrow-color-active: var(--sb-primary);
 
-        .logo-icon {
-          width: 32px;
-          height: 32px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-          filter: drop-shadow(0 2px 4px rgba(66, 184, 131, 0.2));
+    // 选中的菜单项圆角与间距优化
+    .n-menu-item-content {
+      margin-bottom: 4px;
+      border-radius: 8px;
 
-          img {
-            width: 100%;
-            height: 100%;
-          }
-        }
-
-        .logo-text {
-          font-size: 18px;
-          font-weight: 700;
-          background: linear-gradient(120deg, var(--sb-primary), #42b883);
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          white-space: nowrap;
-          letter-spacing: -0.5px;
-        }
-      }
-    }
-
-    .aside-content {
-      flex: 1;
-      padding: 12px;
-
-      .menu-list {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .menu-item {
-        display: flex;
-        align-items: center;
-        padding: 12px;
-        border-radius: 8px;
-        cursor: pointer;
-        color: var(--sb-text-main);
-        transition: background 0.2s;
-        gap: 12px;
-
-        &:hover {
-          background-color: var(--sb-primary-light);
-          color: var(--sb-primary);
-        }
-
-        .menu-icon {
-          flex-shrink: 0;
-        }
-
-        .menu-label {
-          font-size: 14px;
-          white-space: nowrap;
-        }
-      }
-    }
-
-    .aside-footer {
-      padding: 16px;
-      border-top: 1px solid var(--sb-border);
-
-      .toggle-btn {
-        width: 100%;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-        background: var(--sb-bg-layout);
-        border-radius: 8px;
-        cursor: pointer;
-        color: var(--sb-text-main);
-        transition: all 0.2s;
-
-        &:hover {
-          background: var(--sb-primary);
-          color: #fff;
-        }
-
-        .icon-box {
-          font-size: 18px;
+      &.n-menu-item-content--selected {
+        &::before {
+          background-color: var(--sb-primary-light) !important;
         }
       }
     }
   }
 
-  // 兼容全局锁定逻辑
-  :global(html[style*='--ripple-radius']) .app-layout-aside {
-    transition: none !important;
+  /* 动画补丁：配合 GSAP 暗黑模式转场 */
+  :global(html[style*='--ripple-radius']) & {
+    :deep(.n-menu-item-content),
+    .toggle-btn,
+    .logo-text {
+      transition: none !important;
+    }
+  }
+
+  .fade-fast-enter-active,
+  .fade-fast-leave-active {
+    transition: opacity 0.3s ease;
+  }
+  .fade-fast-enter-from,
+  .fade-fast-leave-to {
+    opacity: 0;
   }
 </style>
