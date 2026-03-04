@@ -3,9 +3,6 @@
   import { useStorage } from '@vueuse/core';
   import { useI18n } from 'vue-i18n';
 
-  // 导入业务组件
-  import AppAside from '@/layout/components/app-aside/index.vue';
-
   // 导入图标 (假设你使用 unplugin-icons)
   import IEpHouse from '~icons/ep/house';
   import IEpSetting from '~icons/ep/setting';

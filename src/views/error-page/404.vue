@@ -56,7 +56,7 @@
       </div>
 
       <div class="back-btn-wrapper">
-        <AppBtn
+        <NButton
           type="primary"
           @click="goBack"
           class="custom-back-btn"
@@ -65,7 +65,7 @@
             <IEpBack class="icon" />
             <span>{{ $t('common.backHome') || '返回首页' }}</span>
           </div>
-        </AppBtn>
+        </NButton>
       </div>
     </div>
   </div>
