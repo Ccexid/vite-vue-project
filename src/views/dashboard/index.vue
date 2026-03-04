@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { NFormItemGi, NGrid } from 'naive-ui';
-
   const queryForm = reactive({
     projectName: '',
     categories: [],
@@ -65,39 +63,47 @@
 </script>
 
 <template>
-  <NFlex vertical>
+  <NFlex vertical class="dashboard-wrapper">
     <NForm
       ref="queryFormRef"
       :model="queryForm"
       :inline="true"
+      class="app-form"
     >
-      <NGrid
-        responsive="screen"
-        :x-gap="8"
+      <NFormItem
+        class="app-form-item"
+        path="projectName"
       >
-        <NFormItemGi
-          :span="6"
-          path="projectName"
-        >
-          <NSelect
-            v-model:value="queryForm.projectName"
-            :options="options"
-          />
-        </NFormItemGi>
-        <NFormItemGi
-          :span="6"
-          path="categories"
-        >
-          <NSelect
-            v-model:value="queryForm.categories"
-            :options="options"
-            max-tag-count="responsive"
-            multiple
-          />
-        </NFormItemGi>
-      </NGrid>
+        <NSelect
+          v-model:value="queryForm.projectName"
+          :options="options"
+        />
+      </NFormItem>
+      <NFormItem
+        class="app-form-item"
+        path="categories"
+      >
+        <NSelect
+          v-model:value="queryForm.categories"
+          :options="options"
+          max-tag-count="responsive"
+          multiple
+        />
+      </NFormItem>
     </NForm>
   </NFlex>
 </template>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  .dashboard-wrapper {
+    padding-inline: 20px;
+    .app-form {
+      display: flex;
+      flex-wrap: wrap;
+
+      &-item {
+        width: 200px !important;
+      }
+    }
+  }
+</style>

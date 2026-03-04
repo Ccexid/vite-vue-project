@@ -88,7 +88,6 @@
       </n-layout-header>
 
       <n-layout-content
-        content-style="padding: 20px;"
         class="bg-[var(--sb-bg-layout)]!"
         :native-scrollbar="false"
       >
