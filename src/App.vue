@@ -31,12 +31,43 @@
   // 4. 样式覆盖：确保 Naive UI 使用你的 global.css 变量
   const themeOverrides: GlobalThemeOverrides = {
     common: {
-      primaryColor: '#5468ff', // 对应 --sb-primary
-      primaryColorHover: '#4a5cd3', // 对应 --sb-primary-hover
-      fontFamily: "'Alibaba PuHuiTi 3.0', sans-serif", // 对应 fonts.css
+      primaryColor: '#5468ff',
+      primaryColorHover: '#4a5cd3',
+      primaryColorPressed: '#3d4eb8',
+      fontFamily: "'Alibaba PuHuiTi 3.0', sans-serif",
       borderRadius: '8px',
     },
-    // 你可以根据需要继续微调其他组件
+    Layout: {
+      // 侧边栏背景色和边框颜色
+      siderColor: 'var(--sb-bg-item)',
+      siderBorderColor: 'var(--sb-border)',
+    },
+    Menu: {
+      // 1. 基础文字颜色
+      itemTextColor: 'var(--sb-text-main)',
+      itemTextColorHover: '#5468ff',
+      itemIconColor: 'var(--sb-text-main)',
+      itemIconColorHover: '#5468ff',
+
+      // 2. 选中状态样式 (Active)
+      itemTextColorActive: '#5468ff',
+      itemIconColorActive: '#5468ff',
+      itemTextColorActiveHover: '#5468ff',
+      itemIconColorActiveHover: '#5468ff',
+
+      // 3. 选中状态的背景 (使用你 global.css 里的 light 变量)
+      itemColorActive: 'var(--sb-primary-light)',
+      itemColorActiveHover: 'var(--sb-primary-light)',
+
+      // 4. 树形菜单箭头颜色
+      arrowColor: 'var(--sb-text-muted)',
+      arrowColorHover: '#5468ff',
+      arrowColorActive: '#5468ff',
+
+      // 5. 间距与圆角
+      itemHeight: '42px',
+      borderRadius: '8px',
+    },
   };
 
   // 5. 关键：主题切换逻辑
