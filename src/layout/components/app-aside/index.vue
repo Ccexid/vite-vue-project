@@ -80,7 +80,7 @@
 
   .logo-text {
     background: linear-gradient(120deg, var(--sb-primary), #42b883);
-    -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     letter-spacing: -0.5px;
   }
