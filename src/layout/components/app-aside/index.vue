@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { computed } from 'vue';
-  import { NMenu, type MenuOption } from 'naive-ui';
+  import type { MenuOption } from 'naive-ui';
 
   interface Props {
     isCollapsed: boolean;
