@@ -1,96 +1,47 @@
 <script setup lang="ts">
-  import { useRoute } from 'vue-router';
+  import { useRoute, useRouter } from 'vue-router';
   import { useStorage } from '@vueuse/core';
   import { useI18n } from 'vue-i18n';
 
-  // 导入图标 (假设你使用 unplugin-icons)
-  import IEpHouse from '~icons/ep/house';
-  import IEpSetting from '~icons/ep/setting';
-  import type { MenuOption } from 'naive-ui';
+  // 工具函数与路由配置
+  import { mapRouterToMenu, transformRoutesToSearchItems } from '@/utils/menu-helper';
+  import { dashboardRoutes } from '@/router/index';
   import type { SearchItem } from '@/types/search-box';
 
   const route = useRoute();
+  const router = useRouter();
   const { locale, t } = useI18n();
 
   // 1. 状态管理
   const isCollapsed = useStorage('sidebar-collapsed', false);
   const activeKey = ref<string>((route.name as string) || 'dashboard');
 
-  // 2. 菜单配置 (Tree 类型)
-  const menuOptions: MenuOption[] = [
-    {
-      label: () => t('route.dashboard'),
-      key: 'dashboard',
-      icon: () => h(IEpHouse),
-      children: [
-        {
-          label: () => t('route.dashboardOverview'),
-          icon: () => h(IEpHouse),
-          key: 'dashboard-overview',
-        },
-        {
-          label: () => t('route.dashboardAnalysis'),
-          icon: () => h(IEpSetting),
-          key: 'dashboard-analysis',
-        },
-      ],
-    },
-    {
-      label: () => t('route.scheme'),
-      key: 'scheme',
-      icon: () => h(IEpSetting),
-    },
-  ];
+  // 2. 菜单配置：利用 computed 自动响应国际化语言切换
+  const menuOptions = computed(() => mapRouterToMenu(dashboardRoutes, t));
 
-  // 3. 页面标题同步
-  const updateTitle = () => {
-    const titleKey = route.meta?.title as string;
-    if (titleKey) document.title = t(titleKey);
+  // 3. 搜索选项配置：将路由转换为搜索框所需的格式
+  const searchOptions = computed(() => transformRoutesToSearchItems(dashboardRoutes, t));
+
+  // 4. 处理搜索结果点击：点击后跳转至对应路由
+  const handleSearchClick = (item: SearchItem) => {
+    if (item.name) {
+      router.push({ name: item.name });
+    }
   };
+
+  // 5. 页面标题与激活菜单同步
   watch(
     [locale, () => route.path],
     () => {
-      updateTitle();
+      // 同步标题
+      const titleKey = route.meta?.title as string;
+      if (titleKey) document.title = t(titleKey);
+
+      // 同步当前选中菜单
       activeKey.value = (route.name as string) || 'dashboard';
     },
     { immediate: true },
   );
-
-  // 原始数据池
-  const options = ref<SearchItem[]>([]);
-  // 搜索关键字状态
-  const searchQuery = ref('');
-
-  /**
-   * 优化：使用 computed 替代手动维护 searchList
-   * 1. 自动响应 searchQuery 和 options 的变化
-   * 2. 避免了 query 为空时逻辑判断的冗余
-   */
-  const filteredList = computed(() => {
-    const query = searchQuery.value.trim().toLowerCase();
-    if (!query) return options.value;
-
-    return options.value.filter(
-      (item) =>
-        item.title.toLowerCase().includes(query) || item.description?.toLowerCase().includes(query),
-    );
-  });
-
-  /**
-   * 接收子组件传来的关键字
-   */
-  const handleSearch = (query: string) => {
-    searchQuery.value = query;
-  };
-
-  onMounted(() => {
-    // 优化：直接赋值比循环 push 效率更高
-    options.value = Array.from({ length: 100 }, (_, i) => ({
-      id: i + 1,
-      title: `选项 ${i + 1}`,
-      description: `这是选项 ${i + 1} 的描述`,
-    }));
-  });
 </script>
 
 <template>
@@ -122,8 +73,8 @@
         <div class="flex items-center gap-12px">
           <slot name="header-left">
             <SearchBox
-              :options="filteredList"
-              @search="handleSearch"
+              :options="searchOptions"
+              @click-item="handleSearchClick"
             />
           </slot>
         </div>
@@ -146,7 +97,10 @@
             name="fade-transform"
             mode="out-in"
           >
-            <component :is="Component" />
+            <component
+              :is="Component"
+              :key="route.fullPath"
+            />
           </transition>
         </router-view>
       </n-layout-content>
@@ -155,9 +109,10 @@
 </template>
 
 <style lang="less" scoped>
+  /* 路由切换过渡 */
   .fade-transform-enter-active,
   .fade-transform-leave-active {
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .fade-transform-enter-from {
     opacity: 0;
@@ -168,13 +123,16 @@
     transform: translateX(15px);
   }
 
-  /* 配合全局暗黑模式 GSAP 裁剪动画 */
+  /* 适配暗黑模式切换动画：在执行裁剪转场时禁用 Layout 自身的 CSS 过渡 */
   :global(html[style*='--ripple-radius']) {
     .n-layout,
     .n-layout-sider,
     .n-layout-header,
     .n-layout-content {
       transition: none !important;
+      * {
+        transition: none !important;
+      }
     }
   }
 </style>

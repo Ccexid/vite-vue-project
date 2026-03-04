@@ -3,6 +3,8 @@ import { createWebHashHistory, createRouter, type RouteRecordRaw } from 'vue-rou
 import gsap from 'gsap';
 import ScrollToPlugin from 'gsap/ScrollToPlugin';
 import i18n from '@/locales';
+import type { Component } from 'vue';
+import IEpHouse from '~icons/ep/house';
 
 // 1. 注册gsap滚动插件
 gsap.registerPlugin(ScrollToPlugin);
@@ -12,6 +14,8 @@ declare module 'vue-router' {
     title?: string;
     transition?: string;
     hidden?: boolean;
+    icon?: string | Component;
+    description?: string
   }
 }
 
@@ -21,7 +25,7 @@ const dashboardRoutes: RouteRecordRaw[] = [
     path: '', // 对应父级的 /
     name: 'Dashboard',
     component: () => import('@/views/dashboard/index.vue'),
-    meta: { title: 'route.dashboard' }
+    meta: { title: 'route.dashboard', icon: () => h(IEpHouse) }
   }
 ];
 
@@ -70,7 +74,7 @@ const router = createRouter({
 
 const getPageTitle = (titleKey: unknown): string => {
   if (typeof titleKey !== 'string') return 'Admin';
-  
+
   // 使用 i18n.global.te 检查键是否存在，或者直接强制断言
   return i18n.global.t(titleKey as any);
 };
@@ -82,3 +86,7 @@ router.afterEach((to) => {
 });
 
 export default router;
+
+export {
+  dashboardRoutes
+}
