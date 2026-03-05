@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createI18n } from 'vue-i18n';
 import { useStorage } from '@vueuse/core';
+// --- 1. 引入 dayjs 相关依赖 ---
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
+import 'dayjs/locale/en';
 
 // 1. 定义一个松散的消息记录类型，避免 TS 进行深层递归推导
 type MessageRecord = Record<string, any>;
@@ -59,6 +63,18 @@ const messages = {
 
 // 4. 持久化存储
 const savedLocale = useStorage('selected-lang', 'zh-CN');
+
+const setDayjsLocale = (lang: string) => {
+  // 注意：dayjs 的简体中文 key 是 'zh-cn'，通常需要做一次转换
+  const dayjsLang = lang.toLowerCase() === 'zh-cn' ? 'zh-cn' : 'en';
+  dayjs.locale(dayjsLang);
+};
+
+setDayjsLocale(savedLocale.value);
+
+watch(savedLocale, (val) => {
+  setDayjsLocale(val);
+});
 
 // 5. 创建 i18n 实例
 // 【关键修改】：将 i18n 实例本身或其配置项进行类型降级（断言为 any）
