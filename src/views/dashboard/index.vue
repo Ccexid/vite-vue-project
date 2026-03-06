@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import request from '@/utils/axios';
   const queryForm = reactive({
     projectName: '',
     categories: [],
@@ -60,10 +61,20 @@
       value: 'song12',
     },
   ];
+  onMounted(() => {
+    request.get({
+      url: '/projects',
+    }).then((res: object) => {
+      console.log(res);
+    });
+  });
 </script>
 
 <template>
-  <NFlex vertical class="dashboard-wrapper">
+  <NFlex
+    vertical
+    class="dashboard-wrapper"
+  >
     <NForm
       ref="queryFormRef"
       :model="queryForm"
