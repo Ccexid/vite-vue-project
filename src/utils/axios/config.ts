@@ -1,12 +1,4 @@
-type AppFetchHeaders =
-  | 'application/json'
-  | 'application/x-www-form-urlencoded'
-  | 'multipart/form-data';
-export interface AppFetchConfig {
-  baseURL: string;
-  timeout?: number;
-  defaultHeaders?: AppFetchHeaders;
-}
+import type { AppFetchConfig } from '@/types/app-env';
 
 const config: AppFetchConfig = {
   baseURL: import.meta.env.VITE_BASE_URL,
