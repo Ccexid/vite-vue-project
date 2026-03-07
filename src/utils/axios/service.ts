@@ -84,7 +84,7 @@ service.interceptors.response.use(
       console.error(`[Business Error]: ${data.message || 'Unknown Error'}`);
       return Promise.reject(data);
     }
-    return response;
+    return data;
   },
   (error: AxiosError) => {
     let message = '';

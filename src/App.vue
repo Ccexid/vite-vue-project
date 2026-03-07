@@ -11,6 +11,7 @@
     enUS,
     dateEnUS,
     type GlobalThemeOverrides,
+    NLoadingBarProvider,
   } from 'naive-ui';
 
   // 1. 获取当前语言
@@ -84,14 +85,15 @@
     :date-locale="currentDateLocale"
   >
     <NGlobalStyle />
-
-    <RouterView v-slot="{ Component, route }">
-      <Transition :name="route.meta.transition || 'fade'">
-        <component
-          :is="Component"
-          :key="route.fullPath"
-        />
-      </Transition>
-    </RouterView>
+    <NLoadingBarProvider>
+      <RouterView v-slot="{ Component, route }">
+        <Transition :name="route.meta.transition || 'fade'">
+          <component
+            :is="Component"
+            :key="route.fullPath"
+          />
+        </Transition>
+      </RouterView>
+    </NLoadingBarProvider>
   </NConfigProvider>
 </template>
