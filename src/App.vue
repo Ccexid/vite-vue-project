@@ -46,15 +46,15 @@
     Menu: {
       // 1. 基础文字颜色
       itemTextColor: 'var(--sb-text-main)',
-      itemTextColorHover: '#5468ff',
+      itemTextColorHover: 'var(--sb-primary)',
       itemIconColor: 'var(--sb-text-main)',
-      itemIconColorHover: '#5468ff',
+      itemIconColorHover: 'var(--sb-primary)',
 
       // 2. 选中状态样式 (Active)
-      itemTextColorActive: '#5468ff',
-      itemIconColorActive: '#5468ff',
-      itemTextColorActiveHover: '#5468ff',
-      itemIconColorActiveHover: '#5468ff',
+      itemTextColorActive: 'var(--sb-primary)',
+      itemIconColorActive: 'var(--sb-primary)',
+      itemTextColorActiveHover: 'var(--sb-primary)',
+      itemIconColorActiveHover: 'var(--sb-primary)',
 
       // 3. 选中状态的背景 (使用你 global.css 里的 light 变量)
       itemColorActive: 'var(--sb-primary-light)',
