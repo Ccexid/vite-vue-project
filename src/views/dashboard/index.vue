@@ -13,10 +13,9 @@
   const fetchHotboard = async () => {
     loadingBar.start();
     try {
-      loadingBar.finish();
       const res = await getHotboard({ type: 'bilibili' });
       hotboardResponse.value = res || ({} as HotboardResponse);
-
+      loadingBar.finish();
       // 数据渲染后执行 GSAP 入场动画
       nextTick(() => {
         initStaggerAnimation();
@@ -122,19 +121,11 @@
 
           <div class="p-2px">
             <h3
-              class="m-0 text-14px font-600 line-clamp-2 color-[var(--text-primary)] transition-colors"
+              class="m-0 text-15px font-500 line-clamp-2 text-ellipsis color-[var(--text-primary)] transition-colors"
             >
               {{ item.title }}
             </h3>
-            <p
-              v-if="item.extra?.desc"
-              class="mt-8px mb-12px text-12px color-[var(--text-secondary)] line-clamp-3"
-            >
-              {{ item.extra?.desc }}
-            </p>
-            <div
-              class="mt-12px pt-10px border-t border-t-solid border-[var(--border-color)] flex justify-between items-center"
-            >
+            <div class="mt-4px flex justify-between items-center">
               <div class="flex items-center gap-4px">
                 <NTag
                   :bordered="false"

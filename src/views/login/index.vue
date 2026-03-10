@@ -127,10 +127,6 @@
             {{ $t('login.submit') || '立即登录' }}
           </NButton>
         </div>
-
-        <div class="login-footer form-item">
-          <p>© 2026 Your System. All Rights Reserved.</p>
-        </div>
       </div>
     </div>
   </template>

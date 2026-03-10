@@ -5,25 +5,28 @@ import checker from 'vite-plugin-checker';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import legacy from '@vitejs/plugin-legacy';
-import IconsResolver from 'unplugin-icons/resolver'
+import IconsResolver from 'unplugin-icons/resolver';
 import Icons from 'unplugin-icons/vite';
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
 import UnoCSS from 'unocss/vite';
-
+import { codeInspectorPlugin } from 'code-inspector-plugin';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
+    codeInspectorPlugin({
+      bundler: 'vite',
+    }),
     checker({ typescript: true, vueTsc: true }),
     AutoImport({
-      imports: ['vue', 'vue-router', 'pinia', {
-        'naive-ui': [
-          'useDialog',
-          'useMessage',
-          'useNotification',
-          'useLoadingBar'
-        ]
-      }],
+      imports: [
+        'vue',
+        'vue-router',
+        'pinia',
+        {
+          'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar'],
+        },
+      ],
       dts: 'src/types/auto-imports.d.ts',
     }),
     Components({
