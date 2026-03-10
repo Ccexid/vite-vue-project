@@ -35,7 +35,13 @@
       fontFamily:
         '"Alibaba PuHuiTi 3.0", v-sans, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
       fontFamilyMono:
-        '"Alibaba PuHuiTi 3.0",v-mono, SFMono-Regular, Menlo, Consolas, Courier, monospace',  
+        '"Alibaba PuHuiTi 3.0",v-mono, SFMono-Regular, Menlo, Consolas, Courier, monospace',
+      primaryColor: '#7384FFFF',
+      primaryColorHover: '#3F54EEFF',
+      primaryColorPressed: '#453FEEFF',
+      primaryColorSuppl: '#5F6ED9FF',
+      boxShadow1: '0 15px 50px -10px rgba(0, 0, 0, 0.6)',
+      boxShadow2: ' 0 1px 3px rgba(0, 0, 0, 0.4)',
     },
   };
 
