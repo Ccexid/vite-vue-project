@@ -15,9 +15,18 @@ declare module 'vue-router' {
     transition?: string;
     hidden?: boolean;
     icon?: string | Component;
-    description?: string
+    description?: string;
   }
 }
+// 1. 基础路由配置（登录页、404 等）
+const baseRoutes: RouteRecordRaw[] = [
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/login/index.vue'),
+    meta: { title: 'route.login', hidden: true },
+  },
+];
 
 // 2. 业务模块路由（需要 Layout 布局的）
 const dashboardRoutes: RouteRecordRaw[] = [
@@ -25,8 +34,8 @@ const dashboardRoutes: RouteRecordRaw[] = [
     path: '', // 对应父级的 /
     name: 'Dashboard',
     component: () => import('@/views/dashboard/index.vue'),
-    meta: { title: 'route.dashboard', icon: () => h(IEpHouse) }
-  }
+    meta: { title: 'route.dashboard', icon: () => h(IEpHouse) },
+  },
 ];
 
 // 3. 错误页模块路由（独立的，不依赖 Layout）
@@ -35,8 +44,8 @@ const errorRoutes: RouteRecordRaw[] = [
     path: '/404',
     name: 'NotFound',
     component: () => import('@/views/error-page/404.vue'),
-    meta: { title: 'route.notFound' }
-  }
+    meta: { title: 'route.notFound' },
+  },
 ];
 
 // 4. 最终路由配置
@@ -46,10 +55,11 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('@/layout/index.vue'),
     children: [
-      ...dashboardRoutes
+      ...dashboardRoutes,
       // 其他业务模块也放在这里...
-    ]
+    ],
   },
+  ...baseRoutes,
 
   // --- 分组 B: 独立页面 (404, 登录页等) ---
   ...errorRoutes,
@@ -57,8 +67,8 @@ const routes: RouteRecordRaw[] = [
   // --- 分组 C: 兜底重定向 ---
   {
     path: '/:pathMatch(.*)*',
-    redirect: '/404'
-  }
+    redirect: '/404',
+  },
 ];
 
 // 5. 创建路由实例
@@ -69,7 +79,7 @@ const router = createRouter({
     if (savedPosition) return savedPosition;
     gsap.to(window, { duration: 0.3, scrollTo: { y: 0 } });
     return { top: 0 };
-  }
+  },
 });
 
 const getPageTitle = (titleKey: unknown): string => {
@@ -87,6 +97,4 @@ router.afterEach((to) => {
 
 export default router;
 
-export {
-  dashboardRoutes
-}
+export { dashboardRoutes };

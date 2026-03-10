@@ -80,14 +80,16 @@
   >
     <NGlobalStyle />
     <NLoadingBarProvider>
-      <RouterView v-slot="{ Component, route }">
-        <Transition :name="route.meta.transition || 'fade'">
-          <component
-            :is="Component"
-            :key="route.fullPath"
-          />
-        </Transition>
-      </RouterView>
+      <NMessageProvider>
+        <RouterView v-slot="{ Component, route }">
+          <Transition :name="route.meta.transition || 'fade'">
+            <component
+              :is="Component"
+              :key="route.fullPath"
+            />
+          </Transition>
+        </RouterView>
+      </NMessageProvider>
     </NLoadingBarProvider>
   </NConfigProvider>
 </template>
