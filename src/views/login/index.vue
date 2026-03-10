@@ -118,8 +118,8 @@
 
         <NButton
           type="primary"
+          block
           :loading="loading"
-          class="login-btn"
           @click="handleLogin"
         >
           {{ $t('login.submit') || '立即登录' }}
@@ -142,8 +142,8 @@
     width: 100%;
     background-color: var(--bg-body);
     background-image:
-      radial-gradient(at 0% 0%, rgba(var(--color-primary-rgb), 0.05) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(var(--color-primary-rgb), 0.05) 0px, transparent 50%);
+      radial-gradient(at 0% 0%, rgba(var(--color-primary), 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(var(--color-primary), 0.05) 0px, transparent 50%);
     overflow: hidden;
 
     .login-card {
@@ -212,22 +212,6 @@
             &:hover {
               opacity: 0.8;
             }
-          }
-        }
-
-        .login-btn {
-          width: 100%;
-          height: 48px;
-          border-radius: 24px;
-          font-size: 16px;
-          font-weight: 600;
-          margin-top: 10px;
-          box-shadow: 0 10px 20px -5px rgba(var(--color-primary-rgb), 0.4);
-          transition: all 0.3s ease;
-
-          &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 24px -5px rgba(var(--color-primary-rgb), 0.5);
           }
         }
       }
