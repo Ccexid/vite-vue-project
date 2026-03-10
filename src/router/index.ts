@@ -31,7 +31,7 @@ const baseRoutes: RouteRecordRaw[] = [
 // 2. 业务模块路由（需要 Layout 布局的）
 const dashboardRoutes: RouteRecordRaw[] = [
   {
-    path: '', // 对应父级的 /
+    path: '/dashboard', // 对应父级的 /
     name: 'Dashboard',
     component: () => import('@/views/dashboard/index.vue'),
     meta: { title: 'route.dashboard', icon: () => h(IEpHouse) },
@@ -54,6 +54,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('@/layout/index.vue'),
+    redirect: '/dashboard',
     children: [
       ...dashboardRoutes,
       // 其他业务模块也放在这里...

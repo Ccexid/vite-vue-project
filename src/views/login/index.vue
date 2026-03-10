@@ -25,7 +25,7 @@
     setTimeout(() => {
       loading.value = false;
       message.success('欢迎回来！');
-      router.push('/');
+      router.replace('/');
     }, 1500);
   };
 
@@ -102,7 +102,7 @@
             size="large"
             show-password-on="mousedown"
             :placeholder="$t('common.pleaseInput') || '请输入密码'"
-            class="custom-input"
+            class="custom-input"  
             @keyup.enter="handleLogin"
           >
             <template #prefix>
