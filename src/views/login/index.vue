@@ -74,7 +74,7 @@
   <div class="login-container">
     <div class="login-card">
       <div class="login-header">
-        <h1 class="login-title">LOGIN</h1>
+        <h1 class="login-title">{{ $t('login.login') || 'LOGIN' }}</h1>
         <p class="login-subtitle">{{ $t('login.welcome') || '欢迎登录管理系统' }}</p>
       </div>
 
@@ -85,7 +85,7 @@
             v-model:value="loginForm.username"
             type="text"
             size="large"
-            placeholder="请输入账号"
+            :placeholder="$t('common.pleaseInput') || '请输入账号'"
             class="custom-input"
           >
             <template #prefix>
@@ -101,7 +101,7 @@
             type="password"
             size="large"
             show-password-on="mousedown"
-            placeholder="请输入密码"
+            :placeholder="$t('common.pleaseInput') || '请输入密码'"
             class="custom-input"
             @keyup.enter="handleLogin"
           >
