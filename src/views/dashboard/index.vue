@@ -136,12 +136,21 @@
               class="mt-12px pt-10px border-t border-t-solid border-[var(--border-color)] flex justify-between items-center"
             >
               <div class="flex items-center gap-4px">
-                <div class="i-carbon-fire text-orange-500 text-14px"></div>
-                <span class="text-12px font-500 color-orange-600">{{ item.hot_value }}</span>
+                <NTag
+                  :bordered="false"
+                  size="small"
+                  round
+                  type="warning"
+                >
+                  <div class="flex items-center">
+                    <i-carbon-fire class="text-orange-500 text-14px"></i-carbon-fire>
+                    <span class="text-12px font-500 color-orange-600">{{ item.hot_value }}</span>
+                  </div>
+                </NTag>
               </div>
               <NTag
                 :bordered="false"
-                size="tiny"
+                size="small"
                 round
                 :type="index < 3 ? 'error' : 'default'"
               >
