@@ -6,4 +6,8 @@ export default {
     rememberMe: '记住我',
     forgetPassword: '忘记密码',
     submit: '登录',
+    // 请填写完整的登录信息
+    loginWaring: '请填写完整的登录信息',
+    // Welcome back!
+    welcomeBack: '欢迎回来！',
 }

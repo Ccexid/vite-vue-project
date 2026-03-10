@@ -3,10 +3,12 @@
     import { useRouter } from 'vue-router';
     import { gsap } from 'gsap';
     import { useMessage } from 'naive-ui';
+    import { useI18n } from 'vue-i18n';
 
     const router = useRouter();
     const message = useMessage();
     const loading = ref(false);
+    const { t } = useI18n();                                          
 
     // 表单数据
     const loginForm = reactive({
@@ -15,8 +17,8 @@
     });
 
     const handleLogin = async () => {
-      if (!loginForm.username || !loginForm.password) {
-        message.warning('请填写完整的登录信息');
+      if (!loginForm.username || !loginForm.password) {           
+        message.warning(t('login.loginWaring'));                            
         return;
       }
       loading.value = true;
@@ -24,7 +26,7 @@
       // 模拟登录逻辑
       setTimeout(() => {
         loading.value = false;
-        message.success('欢迎回来！');
+        message.success(t('login.welcomeBack'));
         router.replace('/');
       }, 1500);
     };
