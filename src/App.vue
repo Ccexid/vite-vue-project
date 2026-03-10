@@ -36,12 +36,29 @@
         '"Alibaba PuHuiTi 3.0", v-sans, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
       fontFamilyMono:
         '"Alibaba PuHuiTi 3.0",v-mono, SFMono-Regular, Menlo, Consolas, Courier, monospace',
-      primaryColor: '#7384FFFF',
-      primaryColorHover: '#3F54EEFF',
-      primaryColorPressed: '#453FEEFF',
-      primaryColorSuppl: '#5F6ED9FF',
-      boxShadow1: '0 15px 50px -10px rgba(0, 0, 0, 0.6)',
-      boxShadow2: ' 0 1px 3px rgba(0, 0, 0, 0.4)',
+      primaryColor: '#5468ff',
+      primaryColorHover: '#7686ff',
+      primaryColorPressed: '#3149f5',
+      primaryColorSuppl: '#7686ff',
+      successColor: '#67c23a',
+      successColorHover: '#85ce61',
+      successColorPressed: '#5daf34',
+      successColorSuppl: '#a1e083',
+      /* Warning Color System (Soft Apricot Style) */
+      warningColor: '#e6a23c',
+      warningColorHover: '#ebb563',
+      warningColorPressed: '#cf9236',
+      warningColorSuppl: '#f3d19e',
+      /* Error / Danger Color System */
+      errorColor: '#f56c6c',
+      errorColorHover: '#f78989',
+      errorColorPressed: '#dd6161',
+      errorColorSuppl: '#fab6b6',
+      /* Info Color System */
+      infoColor: '#909399',
+      infoColorHover: '#a6a9ad',
+      infoColorPressed: '#82848a',
+      infoColorSuppl: '#c8c9cc',
     },
   };
 

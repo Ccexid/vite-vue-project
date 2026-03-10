@@ -313,7 +313,7 @@
   .algolia-trigger {
     width: 240px;
     height: 36px;
-    background: var(--sb-border);
+    background: var(--border-color);
     border-radius: 40px;
     display: flex;
     align-items: center;
@@ -326,16 +326,16 @@
       background-color 0.2s,
       border-color 0.2s;
     &:hover {
-      background: var(--sb-bg-input);
-      border-color: var(--sb-primary);
+      background: var(--bg-input);
+      border-color: var(--color-primary);
       .search-icon {
-        color: var(--sb-primary);
+        color: var(--color-primary);
       }
     }
     .left {
       display: flex;
       align-items: center;
-      color: var(--sb-text-muted);
+      color: var(--text-secondary);
       font-size: 14px;
       flex: 1;
       min-width: 0;
@@ -358,12 +358,12 @@
       gap: 4px;
       flex-shrink: 0;
       .key {
-        background: var(--sb-bg-input);
-        border: 1px solid var(--sb-border);
+        background: var(--bg-input);
+        border: 1px solid var(--border-color);
         border-radius: 4px;
         padding: 0 4px;
         font-size: 11px;
-        color: var(--sb-text-muted);
+        color: var(--text-secondary);
         min-width: 18px;
         text-align: center;
       }
@@ -373,7 +373,7 @@
   .algolia-mask {
     position: fixed;
     inset: 0;
-    background: var(--sb-bg-mask);
+    background: var(--bg-mask);
     display: flex;
     justify-content: center;
     padding-top: 80px;
@@ -384,25 +384,25 @@
   .algolia-dialog {
     width: 600px;
     max-height: 80vh;
-    background: var(--sb-bg-dialog);
+    background: var(--bg-modal);
     border-radius: 8px;
-    box-shadow: var(--sb-shadow);
+    box-shadow: var(--shadow-depth-3);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--sb-border);
+    border: 1px solid var(--border-color);
   }
 
   .algolia-header {
     height: 64px;
-    background: var(--sb-bg-input);
+    background: var(--bg-input);
     display: flex;
     align-items: center;
     padding: 0 20px;
-    border-bottom: 2px solid var(--sb-primary);
+    border-bottom: 2px solid var(--color-primary);
     .input-icon {
       font-size: 22px;
-      color: var(--sb-primary);
+      color: var(--color-primary);
       margin-right: 12px;
     }
     input {
@@ -410,19 +410,19 @@
       border: none;
       outline: none;
       font-size: 18px;
-      color: var(--sb-text-main);
+      color: var(--text-primary);
       background: transparent;
       &::placeholder {
-        color: var(--sb-text-muted);
+        color: var(--text-secondary);
       }
     }
     .clear-btn {
       border: none;
       background: none;
       cursor: pointer;
-      color: var(--sb-text-muted);
+      color: var(--text-secondary);
       &:hover {
-        color: var(--sb-primary);
+        color: var(--color-primary);
       }
     }
   }
@@ -430,24 +430,24 @@
   .algolia-body {
     flex: 1;
     overflow: hidden;
-    background: var(--sb-bg-dialog);
+    background: var(--bg-modal);
     .scroller {
       height: 100%;
       padding: 0 12px;
       overflow-y: auto !important;
       scrollbar-width: thin;
-      scrollbar-color: var(--sb-scrollbar-thumb) var(--sb-scrollbar-track);
+      scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
       &::-webkit-scrollbar {
         width: 6px;
       }
       &::-webkit-scrollbar-track {
-        background: var(--sb-scrollbar-track);
+        background: var(--scrollbar-track);
         border-radius: 10px;
       }
       &::-webkit-scrollbar-thumb {
-        background: var(--sb-scrollbar-thumb);
+        background: var(--scrollbar-thumb);
         border-radius: 10px;
-        border: 1px solid var(--sb-scrollbar-track);
+        border: 1px solid var(--scrollbar-track);
         &:hover {
           filter: brightness(1.1);
         }
@@ -464,34 +464,34 @@
 
   .algolia-item {
     width: 100%;
-    background: var(--sb-bg-item);
+    background: var(--bg-card);
     border-radius: 6px;
     height: 56px;
     display: flex;
     align-items: center;
     padding: 0 16px;
-    box-shadow: var(--sb-item-shadow);
+    box-shadow: var(--shadow-depth-1);
     overflow: hidden;
     transition:
       background-color 0.15s ease,
       box-shadow 0.15s ease;
     &.is-active {
-      background: var(--sb-primary);
+      background: var(--color-primary);
       box-shadow: 0 4px 12px rgba(84, 104, 255, 0.4);
       opacity: 1.1;
       .title,
       .desc,
       .item-icon-box {
-        color: var(--sb-text-white) !important;
+        color: var(--text-on-color) !important;
       }
       .enter-icon {
         opacity: 1;
-        color: var(--sb-text-white) !important;
+        color: var(--text-on-color) !important;
         transform: translateX(0);
       }
     }
     .item-icon-box {
-      color: var(--sb-text-muted);
+      color: var(--text-secondary);
       margin-right: 16px;
       font-size: 20px;
     }
@@ -500,18 +500,18 @@
       .title {
         font-size: 14px;
         font-weight: 500;
-        color: var(--sb-text-main);
+        color: var(--text-primary);
       }
       .desc {
         font-size: 12px;
-        color: var(--sb-text-muted);
+        color: var(--text-secondary);
         margin-top: 2px;
       }
     }
     .enter-icon {
       opacity: 0;
       font-size: 14px;
-      color: var(--sb-text-white);
+      color: var(--text-on-color);
       transform: translateX(-5px);
       transition: all 0.2s ease;
     }
@@ -519,21 +519,21 @@
 
   .algolia-footer {
     height: 44px;
-    background: var(--sb-bg-footer);
-    border-top: 1px solid var(--sb-border);
+    background: var(--bg-footer);
+    border-top: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     padding: 0 20px;
     gap: 20px;
     font-size: 12px;
-    color: var(--sb-text-muted);
+    color: var(--text-secondary);
     .key-tag {
-      background: var(--sb-bg-dialog);
-      border: 1px solid var(--sb-border);
+      background: var(--bg-modal);
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       padding: 2px 6px;
       font-weight: bold;
-      color: var(--sb-text-main);
+      color: var(--text-primary);
       margin-right: 4px;
     }
   }
@@ -541,17 +541,17 @@
   .empty-state {
     padding: 60px 0;
     text-align: center;
-    color: var(--sb-text-muted);
+    color: var(--text-secondary);
   }
 
   .algolia-highlight {
     background: transparent;
-    color: var(--sb-primary);
+    color: var(--color-primary);
     text-decoration: underline;
     font-weight: bold;
   }
   .is-active .algolia-highlight {
-    color: var(--sb-text-white) !important;
+    color: var(--text-on-color) !important;
   }
 
   :global(html[style*='--ripple-radius']) & {

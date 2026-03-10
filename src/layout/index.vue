@@ -55,7 +55,7 @@
       :collapsed-width="64"
       :width="240"
       :collapsed="isCollapsed"
-      class="bg-[var(--sb-bg-item)]! border-r-[var(--sb-border)]!"
+      class="bg-[var(--bg-card)]! border-r-[var(--border-color)]!"
     >
       <AppAside
         :is-collapsed="isCollapsed"
@@ -65,10 +65,10 @@
       />
     </n-layout-sider>
 
-    <n-layout class="bg-[var(--sb-bg-layout)]!">
+    <n-layout class="bg-[var(--bg-body)]!">
       <n-layout-header
         bordered
-        class="h-60px px-20px flex items-center justify-between bg-[var(--sb-bg-item)]! border-b-[var(--sb-border)]!"
+        class="h-60px px-20px flex items-center justify-between bg-[var(--bg-card)]! border-b-[var(--border-color)]!"
       >
         <div class="flex items-center gap-12px">
           <slot name="header-left">
@@ -88,7 +88,7 @@
       </n-layout-header>
 
       <n-layout-content
-        class="bg-[var(--sb-bg-layout)]!"
+        class="bg-[var(--bg-body)]!"
         :native-scrollbar="false"
       >
         <router-view v-slot="{ Component }">

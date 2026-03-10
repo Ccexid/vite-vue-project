@@ -122,12 +122,12 @@
       cursor: pointer;
       transition: all 0.2s;
       border: 1px solid transparent;
-      color: var(--sb-text-main);
+      color: var(--text-primary);
 
       &:hover,
       &.is-active {
-        background-color: var(--sb-bg-layout);
-        border-color: var(--sb-border);
+        background-color: var(--bg-body);
+        border-color: var(--border-color);
       }
 
       .lang-icon {
@@ -149,8 +149,8 @@
       top: calc(100% + 8px);
       right: 0;
       width: 120px;
-      background-color: var(--sb-bg-item);
-      border: 1px solid var(--sb-border);
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       padding: 4px;
@@ -165,16 +165,16 @@
         border-radius: 4px;
         cursor: pointer;
         font-size: 13px;
-        color: var(--sb-text-main);
+        color: var(--text-primary);
         transition: background 0.2s;
 
         &:hover {
-          background-color: var(--sb-bg-layout);
+          background-color: var(--bg-body);
         }
         &.is-selected {
-          color: var(--sb-primary);
+          color: var(--color-primary);
           font-weight: bold;
-          background-color: var(--sb-primary-light);
+          background-color: var(--color-primary-light);
         }
         .check-icon {
           font-size: 12px;

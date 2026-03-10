@@ -4,36 +4,57 @@
    1. 基础变量定义
    ========================================================================== */
 :root {
-  --font-main: 'Alibaba PuHuiTi 3.0', -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  --font-family-base:
+    'Alibaba PuHuiTi 3.0', v-sans, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   /* 布局与背景 */
-  --sb-bg-layout: #ffffff;
-  --sb-bg-item: #ffffff;
-  --sb-bg-dialog: #f5f6f7;
-  --sb-bg-mask: rgba(101, 108, 133, 0.8);
-  --sb-bg-input: #ffffff;
-  --sb-bg-footer: #ffffff;
+  --bg-body: #ffffff;
+  --bg-card: #ffffff;
+  --bg-modal: #f5f6f7;
+  --bg-mask: rgba(101, 108, 133, 0.8);
+  --bg-input: #ffffff;
+  --bg-footer: #ffffff;
 
   /* 文字颜色 */
-  --sb-text-main: #1c1e21;
-  --sb-text-muted: #969faf;
-  --sb-text-white: #ffffff;
+  --text-primary: #1c1e21;
+  --text-secondary: #969faf;
+  --text-on-color: #ffffff;
 
   /* 品牌色与状态色 (适配按钮组件) */
-  --sb-primary: #5468ff;   /* */
-  --sb-success: #67c23a;   /* 对应 el-btn-custom--success */
-  --sb-warning: #e6a23c;   /* 对应 el-btn-custom--warning */
-  --sb-danger: #f56c6c;    /* 对应 el-btn-custom--danger */
-  --sb-info: #909399;      /* 对应 el-btn-custom--info */
-  
+  --color-primary: #5468ff; /* */
+  --color-primary-hover: #7686ff;
+  --color-primary-pressed: #3149f5;
+  --color-primary-suppl: #7686ff;
+  /* Success Color System */
+  --color-success: #67c23a;
+  --color-success-hover: #85ce61;
+  --color-success-pressed: #5daf34;
+  --color-success-suppl: #a1e083;
+  /* Warning Color System */
+  --color-warning: #e6a23c;
+  --color-warning-hover: #ebb563;
+  --color-warning-pressed: #cf9236;
+  --color-warning-suppl: #f3d19e;
+  /* Error / Danger Color System */
+  --color-error: #f56c6c;
+  --color-error-hover: #f78989;
+  --color-error-pressed: #dd6161;
+  --color-error-suppl: #fab6b6;
+  /* Info Color System */
+  --color-info: #909399;
+  --color-info-hover: #a6a9ad;
+  --color-info-pressed: #82848a;
+  --color-info-suppl: #c8c9cc;
+
   /* 边框与装饰 */
-  --sb-border: #ebedf0;    /* */
-  --sb-btn-ball: #ffffff;
+  --border-color: #ebedf0; /* */
+  --button-ball: #ffffff;
 
   /* 阴影与装饰 */
-  --sb-shadow: 0 15px 50px -10px rgba(0, 0, 0, 0.3);
-  --sb-item-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --sb-scrollbar-thumb: #d1d5db;
-  --sb-scrollbar-track: #f1f1f1;
+  --shadow-depth-3: 0 15px 50px -10px rgba(0, 0, 0, 0.3);
+  --shadow-depth-1: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --scrollbar-thumb: #d1d5db;
+  --scrollbar-track: #f1f1f1;
 
   /* GSAP 动画控制变量 */
   --ripple-radius: 0px;
@@ -43,31 +64,52 @@
 
 /* 黑夜模式变量覆盖 (改造后) */
 [data-theme='dark'] {
-  --sb-bg-layout: #1a1a1b;
-  --sb-bg-item: #2f3031;
-  --sb-bg-dialog: #242526;
-  --sb-bg-mask: rgba(0, 0, 0, 0.85);
-  --sb-bg-input: #1a1a1b;
-  --sb-bg-footer: #1a1a1b;
+  --bg-body: #1a1a1b;
+  --bg-card: #2f3031;
+  --bg-modal: #242526;
+  --bg-mask: rgba(0, 0, 0, 0.85);
+  --bg-input: #1a1a1b;
+  --bg-footer: #1a1a1b;
 
-  --sb-text-main: #e3e3e3;
-  --sb-text-muted: #a0a0a0;
+  --text-primary: #e3e3e3;
+  --text-secondary: #a0a0a0;
 
   /* 黑夜模式状态色微调：降低饱和度，提高亮度以增强对比度 */
-  --sb-primary: #7384ff;
-  --sb-success: #85ce61;
-  --sb-warning: #ebb563;
-  --sb-danger: #f78989;
-  --sb-info: #a6a9ad;
+  --color-primary: #7384ff;
+  --color-primary-hover: #8f9dff;
+  --color-primary-pressed: #5266f2;
+  --color-primary-suppl: #a9b4ff;
 
-  --sb-border: #3e3f41;
-  --sb-btn-ball: #333333;
+  /* Success Color System (Light Grass Style) */
+  --color-success: #85ce61;
+  --color-success-hover: #9eda7c;
+  --color-success-pressed: #71af52;
+  --color-success-suppl: #b3e595;
 
-  --sb-shadow: 0 15px 50px -10px rgba(0, 0, 0, 0.6);
-  --sb-item-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  /* Warning Color System (Soft Apricot Style) */
+  --color-warning: #ebb563;
+  --color-warning-hover: #f1c990;
+  --color-warning-pressed: #d4a359;
+  --color-warning-suppl: #f7ddb7;
+  /* Error / Danger Color System (Soft Red Style) */
+  --color-error: #f78989;
+  --color-error-hover: #f9a7a7;
+  --color-error-pressed: #d66d6d;
+  --color-error-suppl: #fbc3c3;
+  /* Info Color System (Light Silver Style) */
+  --color-info: #a6a9ad;
+  --color-info-hover: #bebfc3;
+  --color-info-pressed: #8c8f94;
+  --color-info-suppl: #d4d5d8;
 
-  --sb-scrollbar-thumb: #4a4b4d;
-  --sb-scrollbar-track: #242526;
+  --border-color: #3e3f41;
+  --button-ball: #333333;
+
+  --shadow-depth-3: 0 15px 50px -10px rgba(0, 0, 0, 0.6);
+  --shadow-depth-1: 0 1px 3px rgba(0, 0, 0, 0.4);
+
+  --scrollbar-thumb: #4a4b4d;
+  --scrollbar-track: #242526;
 }
 
 /* ==========================================================================
@@ -78,7 +120,7 @@ html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
   /* 重点：html 设为纯白。当黑夜模式收缩动画执行时，裁剪区外会显露此颜色 */
-  background-color: var(--sb-bg-layout);
+  background-color: var(--bg-body);
   /* 初始状态不裁剪 */
   clip-path: none;
 }
@@ -102,8 +144,8 @@ html[data-theme] {
 body {
   padding: 0;
   margin: 0;
-  background-color: var(--sb-bg-layout);
-  color: var(--sb-text-main);
+  background-color: var(--bg-body);
+  color: var(--text-primary);
   /* 禁用背景色改变时的 transition，完全由 GSAP 裁剪逻辑表现过渡 */
   transition: none !important;
 }
@@ -137,7 +179,7 @@ button {
 /* 滚动条通用样式适配 */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--sb-scrollbar-thumb) var(--sb-scrollbar-track);
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar {
@@ -146,11 +188,11 @@ button {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--sb-scrollbar-track);
+  background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--sb-scrollbar-thumb);
+  background: var(--scrollbar-thumb);
   border-radius: 10px;
 }
 

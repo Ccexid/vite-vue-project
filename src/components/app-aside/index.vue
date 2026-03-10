@@ -58,9 +58,9 @@
       />
     </div>
 
-    <div class="aside-footer p-12px border-t border-[var(--sb-border)] flex-shrink-0">
+    <div class="aside-footer p-12px border-t border-[var(--border-color)] flex-shrink-0">
       <button
-        class="toggle-btn w-full h-40px flex items-center justify-center rounded-8px bg-[var(--sb-bg-layout)] text-[var(--sb-text-main)] hover:bg-[var(--sb-primary)] hover:text-white transition-all duration-300"
+        class="toggle-btn w-full h-40px flex items-center justify-center rounded-8px bg-[var(--bg-body)] text-[var(--text-primary)] hover:bg-[var(--color-primary)] hover:text-white transition-all duration-300"
         @click="emit('toggle')"
       >
         <div class="icon-box text-18px">
@@ -78,7 +78,7 @@
   }
 
   .logo-text {
-    background: linear-gradient(120deg, var(--sb-primary), #42b883);
+    background: linear-gradient(120deg, var(--color-primary), #42b883);
     background-clip: text;
     -webkit-text-fill-color: transparent;
     letter-spacing: -0.5px;
@@ -87,11 +87,11 @@
   /* 深度适配 Naive UI Tree 菜单样式 */
   :deep(.n-menu) {
     // 基础变量绑定自定义 CSS 变量
-    --n-item-color-active: var(--sb-primary);
-    --n-item-color-active-hover: var(--sb-primary);
-    --n-item-text-color-active: var(--sb-primary);
-    --n-item-icon-color-active: var(--sb-primary);
-    --n-arrow-color-active: var(--sb-primary);
+    --n-item-color-active: var(--color-primary);
+    --n-item-color-active-hover: var(--color-primary);
+    --n-item-text-color-active: var(--color-primary);
+    --n-item-icon-color-active: var(--color-primary);
+    --n-arrow-color-active: var(--color-primary);
 
     // 选中的菜单项圆角与间距优化
     .n-menu-item-content {
@@ -100,7 +100,7 @@
 
       &.n-menu-item-content--selected {
         &::before {
-          background-color: var(--sb-bg-item) !important;
+          background-color: var(--bg-card) !important;
         }
       }
     }

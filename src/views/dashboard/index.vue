@@ -88,7 +88,7 @@
 </script>
 
 <template>
-  <div class="dashboard-wrapper p-20px bg-[var(--sb-bg-layout)] min-h-100vh">
+  <div class="dashboard-wrapper p-20px bg-[var(--bg-body)] min-h-100vh">
     <div class="waterfall-container">
       <div
         v-for="(item, index) in hotboardResponse.list"
@@ -115,25 +115,25 @@
               <div
                 class="absolute inset-0 bg-[var(--sb-bg-button)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
               >
-                <div class="i-carbon-launch text-[var(--sb-text-main)] text-24px"></div>
+                <div class="i-carbon-launch text-[var(--text-primary)] text-24px"></div>
               </div>
             </div>
           </template>
 
           <div class="p-2px">
             <h3
-              class="m-0 text-14px font-600 line-clamp-2 color-[var(--sb-text-main)] transition-colors"
+              class="m-0 text-14px font-600 line-clamp-2 color-[var(--text-primary)] transition-colors"
             >
               {{ item.title }}
             </h3>
             <p
               v-if="item.extra?.desc"
-              class="mt-8px mb-12px text-12px color-[var(--sb-text-muted)] line-clamp-3"
+              class="mt-8px mb-12px text-12px color-[var(--text-secondary)] line-clamp-3"
             >
               {{ item.extra?.desc }}
             </p>
             <div
-              class="mt-12px pt-10px border-t border-t-solid border-[var(--sb-border)] flex justify-between items-center"
+              class="mt-12px pt-10px border-t border-t-solid border-[var(--border-color)] flex justify-between items-center"
             >
               <div class="flex items-center gap-4px">
                 <div class="i-carbon-fire text-orange-500 text-14px"></div>
@@ -176,10 +176,10 @@
 
   .custom-card {
     border: none !important;
-    background: var(--sb-bg-item);
+    background: var(--bg-card);
     // 移除 CSS 原生的 transition，由 GSAP 托管
     :deep(.n-card-cover) {
-      border-bottom: 1px solid var(--sb-border);
+      border-bottom: 1px solid var(--border-color);
     }
     :deep(.n-card__content) {
       padding: 12px !important;

@@ -78,8 +78,8 @@
     justify-content: center;
     height: 100vh;
     width: 100%;
-    background-color: var(--sb-bg-layout); // 使用你项目中的背景变量
-    color: var(--sb-text-main);
+    background-color: var(--bg-body); // 使用你项目中的背景变量
+    color: var(--text-primary);
     overflow: hidden;
 
     .content-box {
@@ -92,7 +92,7 @@
         margin: 0;
         line-height: 1;
         // 使用品牌主色渐变
-        background: linear-gradient(135deg, var(--sb-primary), #a0cfff);
+        background: linear-gradient(135deg, var(--color-primary), #a0cfff);
         background-clip: text;
         -webkit-text-fill-color: transparent;
         letter-spacing: -5px;
@@ -105,13 +105,13 @@
 
         .error-msg {
           font-size: 24px;
-          color: var(--sb-text-main);
+          color: var(--text-primary);
           margin-bottom: 12px;
         }
 
         .error-desc {
           font-size: 14px;
-          color: var(--sb-text-muted); // 使用你项目中的置灰文字变量
+          color: var(--text-secondary); // 使用你项目中的置灰文字变量
         }
       }
 
@@ -134,7 +134,7 @@
           border-radius: 22px;
           padding: 0 30px;
           font-weight: 600;
-          box-shadow: 0 4px 14px 0 rgba(var(--sb-primary-rgb), 0.39);
+          box-shadow: 0 4px 14px 0 rgba(var(--color-primary-rgb), 0.39);
 
           &:hover {
             .icon {

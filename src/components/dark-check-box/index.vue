@@ -110,8 +110,8 @@
   .theme-switch-bar {
     width: 58px;
     height: 30px;
-    background-color: var(--sb-bg-item);
-    border: 1px solid var(--sb-border);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 30px;
     padding: 2px;
     cursor: pointer;
@@ -137,7 +137,7 @@
       .icon-ball {
         width: 24px;
         height: 24px;
-        background: var(--sb-btn-ball, #fff);
+        background: var(--button-ball, #fff);
         border-radius: 50%;
         display: flex;
         align-items: center;
