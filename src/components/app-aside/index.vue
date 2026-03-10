@@ -87,8 +87,8 @@
   /* 深度适配 Naive UI Tree 菜单样式 */
   :deep(.n-menu) {
     // 基础变量绑定自定义 CSS 变量
-    --n-item-color-active: var(--sb-primary-light, #f0f2ff);
-    --n-item-color-active-hover: var(--sb-primary-light, #f0f2ff);
+    --n-item-color-active: var(--sb-primary);
+    --n-item-color-active-hover: var(--sb-primary);
     --n-item-text-color-active: var(--sb-primary);
     --n-item-icon-color-active: var(--sb-primary);
     --n-arrow-color-active: var(--sb-primary);
@@ -100,7 +100,7 @@
 
       &.n-menu-item-content--selected {
         &::before {
-          background-color: var(--sb-primary-light) !important;
+          background-color: var(--sb-bg-item) !important;
         }
       }
     }
