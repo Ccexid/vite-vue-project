@@ -1,18 +1,63 @@
 @import './global.css';
 
-body,
-html {
-  height: 100%;
+/* 1. 基础重置与背景强锁定 */
+html,
+body {
+  margin: 0;
+  padding: 0;
   width: 100%;
-  font-family: var(--font-family);
-  font-variant-numeric: tabular-nums;
-  font-size: 14px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  user-select: none; /* 防止 Web 常见的文字意外选中感 */
+  height: 100%;
+  /* 必须锁死，防止动画结束瞬间 NGlobalStyle 还没挂载导致的闪烁 */
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  transition: none !important;
 }
+
 #app {
-  height: 100%;
   width: 100%;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* 2. View Transition 核心修复 */
+
+/* 2.1 彻底禁用默认的淡入淡出 (fade) 效果 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  /* 关键：让快照本身不透明，承载各自模式下的 HSL 背景 */
+  background-color: hsl(var(--background));
+  height: 100%;
+  overflow: clip;
+}
+
+::view-transition-group(root) {
+  animation: none;
+  /* 确保容器本身不带背景，完全由内部的 old/new 决定颜色 */
+  background-color: transparent !important;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+.dark::view-transition-new(root) {
+  z-index: 9999;
+}
+
+:not(.dark)::view-transition-old(root) {
+  z-index: 9999;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  /* 避免圆圈边缘出现毛刺 */
+  outline: 1px solid transparent;
 }

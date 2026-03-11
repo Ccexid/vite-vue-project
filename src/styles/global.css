@@ -1,29 +1,59 @@
-/* 1. 你的原有配置 */
+/* 定义在根节点，默认浅色模式 */
 :root {
+  /* --- 基础配置 --- */
   --font-family:
     'Alibaba PuHuiTi 3.0', v-sans, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    sans-serif;
+  --radius: 6px;
+
+  /* --- 品牌主色 (以 #7384ff 为例，转换为 HSL: 233, 100%, 73%) --- */
+  --primary: 233 100% 73%;
+  --primary-hover: 233 100% 80%;
+  --primary-active: 233 100% 65%;
+  --primary-suppl: 233 100% 85%;
+
+  /* --- 中性色 (背景、卡片、文字) --- */
+  --background: 0 0% 100%; /* #FFFFFF */
+  --background-deep: 210 20% 98%; /* 略深的背景色，用于 Layout */
+  --card: 0 0% 100%; /* 卡片背景 */
+  --popover: 0 0% 100%; /* 弹出层背景 */
+
+  --foreground: 220 15% 15%; /* 主文字颜色 */
+  --muted-foreground: 220 10% 45%; /* 次要文字颜色 */
+
+  --border: 220 15% 92%; /* 边框颜色 */
+  --divider: 220 15% 94%; /* 分割线颜色 */
+
+  /* --- 功能色 (状态) --- */
+  --success: 145 60% 45%;
+  --warning: 35 90% 55%;
+  --destructive: 350 70% 50%; /* 错误/危险 */
+  --info: 210 90% 55%;
 }
 
-/* 2. 核心：View Transition 动画配置 */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
+/* 暗黑模式覆盖 */
+html.dark {
+  /* --- 品牌色微调 (暗色下适当增加亮度/饱和度) --- */
+  --primary: 233 100% 75%;
+  --primary-hover: 233 100% 82%;
+  --primary-active: 233 100% 70%;
+  --primary-suppl: 233 100% 30%;
 
-/* 浅色切深色：新视图（深色）在上面，做圆形扩散 */
-.dark::view-transition-new(root) {
-  z-index: 999;
-}
-.dark::view-transition-old(root) {
-  z-index: 1;
-}
+  /* --- 暗色背景层级 --- */
+  --background: 240 10% 4%; /* #101014 (body) */
+  --background-deep: 240 10% 2%; /* 更深的背景 */
+  --card: 240 6% 10%; /* #18181c (card) */
+  --popover: 240 6% 15%; /* 弹出层稍亮 */
 
-/* 深色切浅色：旧视图（深色）在上面，做圆形收缩 */
-::view-transition-new(root) {
-  z-index: 1;
-}
-::view-transition-old(root) {
-  z-index: 999;
+  --foreground: 0 0% 98%; /* 近白色文字 */
+  --muted-foreground: 240 5% 65%;
+
+  --border: 240 5% 15%;
+  --divider: 240 5% 12%;
+
+  /* --- 功能色微调 --- */
+  --success: 145 50% 50%;
+  --warning: 35 80% 60%;
+  --destructive: 350 65% 60%;
+  --info: 210 80% 60%;
 }

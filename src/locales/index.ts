@@ -58,7 +58,7 @@ const enModules = import.meta.glob<MessageRecord>('./lang/en/**/*.ts', { eager: 
 // 3. 构建消息对象
 const messages = {
   'zh-CN': getLocaleMessages(zhModules, 'zh-CN'),
-  'en': getLocaleMessages(enModules, 'en'),
+  en: getLocaleMessages(enModules, 'en'),
 };
 
 // 4. 持久化存储
