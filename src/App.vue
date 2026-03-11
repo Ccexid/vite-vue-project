@@ -43,7 +43,7 @@
             <NModalProvider>
               <RouterView v-slot="{ Component, route }">
                 <Transition
-                  :name="(route.meta.transition as string) || 'fade'"
+                  :name="route.meta.transition as string || 'fade'"
                   mode="out-in"
                 >
                   <component
@@ -68,8 +68,5 @@
   .fade-enter-from,
   .fade-leave-to {
     opacity: 0;
-  }
-  html.is-animating * {
-    transition: none !important;
   }
 </style>
