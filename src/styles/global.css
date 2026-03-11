@@ -1,3 +1,29 @@
+/* 1. 你的原有配置 */
 :root {
-  --font-family-base: '"Alibaba PuHuiTi 3.0", v-sans, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"';
+  --font-family:
+    'Alibaba PuHuiTi 3.0', v-sans, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+/* 2. 核心：View Transition 动画配置 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* 浅色切深色：新视图（深色）在上面，做圆形扩散 */
+.dark::view-transition-new(root) {
+  z-index: 999;
+}
+.dark::view-transition-old(root) {
+  z-index: 1;
+}
+
+/* 深色切浅色：旧视图（深色）在上面，做圆形收缩 */
+::view-transition-new(root) {
+  z-index: 1;
+}
+::view-transition-old(root) {
+  z-index: 999;
 }
