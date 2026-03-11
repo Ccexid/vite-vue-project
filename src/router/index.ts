@@ -1,45 +1,36 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createWebHashHistory, createRouter, type RouteRecordRaw } from 'vue-router';
+import { h, type Component } from 'vue';
 import gsap from 'gsap';
 import ScrollToPlugin from 'gsap/ScrollToPlugin';
 import i18n from '@/locales';
-import type { Component } from 'vue';
 import IEpHouse from '~icons/ep/house';
 
-// 1. 注册gsap滚动插件
+// 1. 注册 GSAP 插件
 gsap.registerPlugin(ScrollToPlugin);
 
+// 2. 扩展 RouteMeta 类型定义
 declare module 'vue-router' {
   interface RouteMeta {
-    title?: string;
+    title?: string; // 对应 i18n 的 key
     transition?: string;
     hidden?: boolean;
-    icon?: string | Component;
+    icon?: Component; // 直接使用组件类型
     description?: string;
   }
 }
-// 1. 基础路由配置（登录页、404 等）
-const baseRoutes: RouteRecordRaw[] = [
+
+/**
+ * 3. 路由模块化拆分
+ */
+
+// 独立页面 (不需要 Layout)
+const publicRoutes: RouteRecordRaw[] = [
   {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/login/index.vue'),
     meta: { title: 'route.login', hidden: true },
   },
-];
-
-// 2. 业务模块路由（需要 Layout 布局的）
-const dashboardRoutes: RouteRecordRaw[] = [
-  {
-    path: '/dashboard', // 对应父级的 /
-    name: 'Dashboard',
-    component: () => import('@/views/dashboard/index.vue'),
-    meta: { title: 'route.dashboard', icon: () => h(IEpHouse) },
-  },
-];
-
-// 3. 错误页模块路由（独立的，不依赖 Layout）
-const errorRoutes: RouteRecordRaw[] = [
   {
     path: '/404',
     name: 'NotFound',
@@ -48,54 +39,68 @@ const errorRoutes: RouteRecordRaw[] = [
   },
 ];
 
-// 4. 最终路由配置
+// 业务页面 (需要 Layout 嵌套)
+export const dashboardRoutes: RouteRecordRaw[] = [
+  {
+    path: 'dashboard', // 子路由建议使用相对路径
+    name: 'Dashboard',
+    component: () => import('@/views/dashboard/index.vue'),
+    // 使用 h() 函数渲染图标组件
+    meta: { title: 'route.dashboard', icon: h(IEpHouse) },
+  },
+];
+
+/**
+ * 4. 最终路由树构造
+ */
 const routes: RouteRecordRaw[] = [
-  // --- 分组 A: 需要 Layout 的页面 ---
   {
     path: '/',
     component: () => import('@/layout/index.vue'),
     redirect: '/dashboard',
-    children: [
-      ...dashboardRoutes,
-      // 其他业务模块也放在这里...
-    ],
+    children: dashboardRoutes,
   },
-  ...baseRoutes,
-
-  // --- 分组 B: 独立页面 (404, 登录页等) ---
-  ...errorRoutes,
-
-  // --- 分组 C: 兜底重定向 ---
+  ...publicRoutes,
   {
     path: '/:pathMatch(.*)*',
     redirect: '/404',
   },
 ];
 
-// 5. 创建路由实例
+/**
+ * 5. 创建路由实例
+ */
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes,
-  scrollBehavior(_to, _from, savedPosition) {
+  scrollBehavior(to, _from, savedPosition) {
     if (savedPosition) return savedPosition;
-    gsap.to(window, { duration: 0.3, scrollTo: { y: 0 } });
+
+    // 如果是同页面锚点跳转，不触发动画
+    if (to.hash) return { el: to.hash, behavior: 'smooth' };
+
+    // 使用 GSAP 平滑滚动回顶部
+    gsap.to(window, { duration: 0.3, scrollTo: { y: 0 }, ease: 'power2.out' });
     return { top: 0 };
   },
 });
 
-const getPageTitle = (titleKey: unknown): string => {
-  if (typeof titleKey !== 'string') return 'Admin';
+/**
+ * 6. 辅助函数：获取翻译后的页面标题
+ */
+const getPageTitle = (titleKey?: string): string => {
+  const defaultTitle = 'Admin';
+  if (!titleKey) return defaultTitle;
 
-  // 使用 i18n.global.te 检查键是否存在，或者直接强制断言
-  return i18n.global.t(titleKey as any);
+  // i18n.global.t 在某些版本下需要正确处理 TFunction 类型
+  // 这里假设你的 i18n 配置已经正确导出
+  return i18n.global.te(titleKey) ? i18n.global.t(titleKey) : titleKey;
 };
 
+// 7. 路由后置守卫
 router.afterEach((to) => {
-  // 动态设置标题
-  const title = to.meta.title ? getPageTitle(to.meta.title) : 'Admin';
+  const title = getPageTitle(to.meta.title);
   document.title = title;
 });
 
 export default router;
-
-export { dashboardRoutes };
