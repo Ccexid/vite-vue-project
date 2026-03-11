@@ -69,4 +69,7 @@
   .fade-leave-to {
     opacity: 0;
   }
+  html.is-animating * {
+    transition: none !important;
+  }
 </style>
