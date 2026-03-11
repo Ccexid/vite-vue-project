@@ -34,6 +34,7 @@
     :locale="currentLocale"
     :date-locale="currentDateLocale"
     inline-theme-disabled
+    tag="section"
   >
     <NGlobalStyle />
     <NLoadingBarProvider>
@@ -43,7 +44,7 @@
             <NModalProvider>
               <RouterView v-slot="{ Component, route }">
                 <Transition
-                  :name="route.meta.transition as string || 'fade'"
+                  :name="(route.meta.transition as string) || 'fade'"
                   mode="out-in"
                 >
                   <component

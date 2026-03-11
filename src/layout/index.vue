@@ -4,15 +4,8 @@
   <NLayout
     ref="layoutRef"
     :native-scrollbar="false"
-    position="absolute"
   >
-    <NLayoutHeader>
-      <div class="flex">
-        <header>
-          1
-        </header>
-      </div>
-    </NLayoutHeader>
+    <NLayoutHeader>颐和园路</NLayoutHeader>
     <NLayoutContent>
       <RouterView v-slot="{ Component, route }">
         <component
@@ -21,7 +14,6 @@
         />
       </RouterView>
     </NLayoutContent>
-    
   </NLayout>
 </template>
 
