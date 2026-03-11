@@ -46,7 +46,13 @@
     ref="containerRef"
   >
     <div class="content-box">
-      <h1 class="error-code">404</h1>
+      <n-gradient-text
+        type="danger"
+        :size="120"
+        class="error-code"
+      >
+        404
+      </n-gradient-text>
 
       <div class="error-info">
         <h2 class="error-msg">{{ $t('common.pageNotFound') || '抱歉，您访问的页面不存在' }}</h2>
@@ -57,7 +63,7 @@
 
       <div class="back-btn-wrapper">
         <NButton
-          type="primary"
+          type="error"
           @click="goBack"
           class="custom-back-btn"
         >
@@ -85,19 +91,6 @@
     .content-box {
       text-align: center;
       padding: 40px;
-
-      .error-code {
-        font-size: 120px;
-        font-weight: 800;
-        margin: 0;
-        line-height: 1;
-        // 使用品牌主色渐变
-        background: linear-gradient(135deg, var(--color-primary), #a0cfff);
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        letter-spacing: -5px;
-        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
-      }
 
       .error-info {
         margin-top: 20px;

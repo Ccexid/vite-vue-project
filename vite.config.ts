@@ -55,14 +55,4 @@ export default defineConfig({
       },
     },
   },
-  server: {
-    proxy: {
-      '/uapis': {
-        target: 'https://uapis.cn/api',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/uapis/, ''),
-        secure: false,
-      },
-    },
-  },
 });
