@@ -1,15 +1,17 @@
+/* index.less */
 @import './global.css';
 
-/* 1. 基础重置与背景强锁定 */
+/* 1. 基础布局重置 */
 html,
 body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  /* 必须锁死，防止动画结束瞬间 NGlobalStyle 还没挂载导致的闪烁 */
+  /* 锁定背景色，防止 Vue 组件未就绪时露底 */
   background-color: hsl(var(--background)) !important;
   color: hsl(var(--foreground)) !important;
+  /* 禁用浏览器默认过渡，完全交由 View Transition 控制 */
   transition: none !important;
 }
 
@@ -22,42 +24,23 @@ body {
   box-sizing: border-box;
 }
 
-/* 2. View Transition 核心修复 */
-
-/* 2.1 彻底禁用默认的淡入淡出 (fade) 效果 */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
-  /* 关键：让快照本身不透明，承载各自模式下的 HSL 背景 */
-  background-color: hsl(var(--background));
-  height: 100%;
-  overflow: clip;
+  background-color: hsl(var(--background)); /* 锁定快照背景 */
 }
 
-::view-transition-group(root) {
-  animation: none;
-  /* 确保容器本身不带背景，完全由内部的 old/new 决定颜色 */
-  background-color: transparent !important;
+:not(.dark)::view-transition-old(root) {
+  z-index: 9999;
 }
-
-::view-transition-new(root) {
-  z-index: 1;
-}
-::view-transition-old(root) {
+:not(.dark)::view-transition-new(root) {
   z-index: 1;
 }
 
 .dark::view-transition-new(root) {
   z-index: 9999;
 }
-
-:not(.dark)::view-transition-old(root) {
-  z-index: 9999;
-}
-
-::view-transition-old(root),
-::view-transition-new(root) {
-  /* 避免圆圈边缘出现毛刺 */
-  outline: 1px solid transparent;
+.dark::view-transition-old(root) {
+  z-index: 1;
 }

@@ -19,26 +19,6 @@ declare module 'vue-router' {
   }
 }
 
-/**
- * 3. 路由模块化拆分
- */
-
-// 独立页面 (不需要 Layout)
-const publicRoutes: RouteRecordRaw[] = [
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import('@/views/login/index.vue'),
-    meta: { title: 'route.login', hidden: true },
-  },
-  {
-    path: '/404',
-    name: 'NotFound',
-    component: () => import('@/views/error-page/404.vue'),
-    meta: { title: 'route.notFound' },
-  },
-];
-
 // 业务页面 (需要 Layout 嵌套)
 export const dashboardRoutes: RouteRecordRaw[] = [
   {
@@ -59,11 +39,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/layout/index.vue'),
     redirect: '/dashboard',
     children: dashboardRoutes,
-  },
-  ...publicRoutes,
-  {
-    path: '/:pathMatch(.*)*',
-    redirect: '/404',
   },
 ];
 

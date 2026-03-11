@@ -1,59 +1,86 @@
-/* 定义在根节点，默认浅色模式 */
-:root {
-  /* --- 基础配置 --- */
-  --font-family:
-    'Alibaba PuHuiTi 3.0', v-sans, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    sans-serif;
-  --radius: 6px;
+/**
+ * Vben Admin 3.0 / Next 全局样式定义 (UnoCSS 版)
+ */
 
-  /* --- 品牌主色 (以 #7384ff 为例，转换为 HSL: 233, 100%, 73%) --- */
-  --primary: 233 100% 73%;
-  --primary-hover: 233 100% 80%;
-  --primary-active: 233 100% 65%;
-  --primary-suppl: 233 100% 85%;
+@layer base {
+  :root {
+    /* --- 1. 字体与基础设置 --- */
+    --font-family: 'Alibaba PuHuiTi 3.0', v-sans, system-ui, -apple-system, sans-serif;
+    --font-size-base: 16px;
+    --radius: 0.5rem;
 
-  /* --- 中性色 (背景、卡片、文字) --- */
-  --background: 0 0% 100%; /* #FFFFFF */
-  --background-deep: 210 20% 98%; /* 略深的背景色，用于 Layout */
-  --card: 0 0% 100%; /* 卡片背景 */
-  --popover: 0 0% 100%; /* 弹出层背景 */
+    /* --- 2. 基础中性色 (HSL 数值格式) --- */
+    --background: 0 0% 100%;
+    --background-deep: 210 20% 98%;
+    --foreground: 224 71.4% 4.1%;
 
-  --foreground: 220 15% 15%; /* 主文字颜色 */
-  --muted-foreground: 220 10% 45%; /* 次要文字颜色 */
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
 
-  --border: 220 15% 92%; /* 边框颜色 */
-  --divider: 220 15% 94%; /* 分割线颜色 */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 262.1 83.3% 57.8%;
 
-  /* --- 功能色 (状态) --- */
-  --success: 145 60% 45%;
-  --warning: 35 90% 55%;
-  --destructive: 350 70% 50%; /* 错误/危险 */
-  --info: 210 90% 55%;
+    /* --- 3. 语义化色板 (对接 generatorColorVariables.ts) --- */
+    /* 主色 */
+    --primary: 262.1 83.3% 57.8%;
+    --primary-foreground: 0 0% 100%;
+
+    /* 功能色 */
+    --success: 142.1 70.6% 45.3%;
+    --success-foreground: 0 0% 100%;
+    --warning: 47.9 95.8% 51.8%;
+    --warning-foreground: 26 83.3% 1.1%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* 其它布局 */
+    --header: 0 0% 100%;
+    --sidebar: 210 20% 98%;
+  }
+
+  /* 暗黑模式 */
+  .dark {
+    --background: 224 71.4% 4.1%;
+    --background-deep: 224 71.4% 2%;
+    --foreground: 210 20% 98%;
+
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 263.4 70% 50.4%;
+
+    --primary: 263.4 70% 50.4%;
+    --header: 224 71.4% 4.1%;
+    --sidebar: 224 71.4% 4.1%;
+  }
 }
 
-/* 暗黑模式覆盖 */
-html.dark {
-  /* --- 品牌色微调 (暗色下适当增加亮度/饱和度) --- */
-  --primary: 233 100% 75%;
-  --primary-hover: 233 100% 82%;
-  --primary-active: 233 100% 70%;
-  --primary-suppl: 233 100% 30%;
+@layer base {
+  html,
+  body {
+    /* 使用 UnoCSS 默认的快捷变量或直接引用 */
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    /* 移除 !important，允许 View Transition 控制 */
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
 
-  /* --- 暗色背景层级 --- */
-  --background: 240 10% 4%; /* #101014 (body) */
-  --background-deep: 240 10% 2%; /* 更深的背景 */
-  --card: 240 6% 10%; /* #18181c (card) */
-  --popover: 240 6% 15%; /* 弹出层稍亮 */
-
-  --foreground: 0 0% 98%; /* 近白色文字 */
-  --muted-foreground: 240 5% 65%;
-
-  --border: 240 5% 15%;
-  --divider: 240 5% 12%;
-
-  /* --- 功能色微调 --- */
-  --success: 145 50% 50%;
-  --warning: 35 80% 60%;
-  --destructive: 350 65% 60%;
-  --info: 210 80% 60%;
+  /* 修复 View Transition 动画背景 */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    background-color: hsl(var(--background));
+    mix-blend-mode: normal;
+  }
 }

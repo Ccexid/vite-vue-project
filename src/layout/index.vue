@@ -1,14 +1,4 @@
-<script setup lang="ts">
-  /**
-   * 1. 注入来自 App.vue 的全局切换函数
-   * 第二个参数是默认值，防止注入失败时报错
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const toggleTheme = inject<(event: MouseEvent) => void>('toggleTheme', (_event) => {
-    // 降级处理：如果没有注入成功，至少能切换类名
-    document.documentElement.classList.toggle('dark');
-  });
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <NLayout
@@ -17,17 +7,13 @@
     position="absolute"
     content-class="main-layout-container"
   >
-    <NLayoutHeader
-      bordered
-      content-class="layout-header"
-    >
+    <NLayoutHeader content-class="layout-header">
       <div class="header-content">
         <div class="logo">颐和园路</div>
 
         <NButton
           quaternary
           circle
-          @click="toggleTheme($event)"
         >
           <template #icon>
             <span>🌓</span>
