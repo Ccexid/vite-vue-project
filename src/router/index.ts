@@ -16,6 +16,7 @@ declare module 'vue-router' {
     hidden?: boolean;
     icon?: Component; // 直接使用组件类型
     description?: string;
+    keepAlive?: boolean;
   }
 }
 

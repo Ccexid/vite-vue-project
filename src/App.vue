@@ -41,7 +41,7 @@
 
 <template>
   <NConfigProvider
-    class="h-full"
+    class="h-full min-w-375px"
     :theme="activeTheme"
     :locale="currentLocale"
     :date-locale="currentDateLocale"
@@ -53,7 +53,19 @@
         <NNotificationProvider>
           <NMessageProvider>
             <NModalProvider>
-              <RouterView />
+              <RouterView v-slot="{ Component, route }">
+                <keep-alive v-if="route.meta.keepAlive">
+                  <component
+                    :is="Component"
+                    :key="route.fullPath"
+                  />
+                </keep-alive>
+                <component
+                  v-else
+                  :is="Component"
+                  :key="route.fullPath"
+                />
+              </RouterView>
             </NModalProvider>
           </NMessageProvider>
         </NNotificationProvider>

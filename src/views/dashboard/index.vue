@@ -4,11 +4,12 @@
 
 <template>
   <NGrid
-    x-gap="12"
+    :x-gap="12"
+    :y-gap="12"
     :cols="4"
   >
     <NGi
-      v-for="i in 4"
+      v-for="i in 400"
       :key="i"
     >
       <div class="h-full w-full">
