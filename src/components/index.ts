@@ -1,3 +1,3 @@
-import { FullScreenButton, DarkToggleButton } from './button';
+import { FullScreenButton, DarkToggleButton, LangSelectButton } from './button';
 
-export { FullScreenButton, DarkToggleButton };
+export { FullScreenButton, DarkToggleButton, LangSelectButton };

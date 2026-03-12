@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { DarkToggleButton, FullScreenButton } from '@/components';
+  import { DarkToggleButton, FullScreenButton, LangSelectButton } from '@/components';
 </script>
 
 <template>
@@ -32,8 +32,9 @@
         </NGridItem>
         <NGridItem>
           <div class="w-full h-full flex items-center justify-end gap-8px">
-            <FullScreenButton />
+            <LangSelectButton />
             <DarkToggleButton />
+            <FullScreenButton />
           </div>
         </NGridItem>
       </NGrid>
