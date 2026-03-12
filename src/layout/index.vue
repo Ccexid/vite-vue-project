@@ -7,7 +7,7 @@
     content-style="width: 100%;height: 100%;"
   >
     <NLayoutHeader content-style="height: 64px">
-      <div class="h-64px shadow-card"></div>
+      <div class="h-64px shadow-card">111</div>
     </NLayoutHeader>
 
     <NLayoutContent content-style="padding: 20px;width: 100%;height: 100%;">
