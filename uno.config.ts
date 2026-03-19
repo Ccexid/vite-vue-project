@@ -1,4 +1,4 @@
-import { defineConfig, transformerVariantGroup } from 'unocss';
+import { defineConfig, transformerVariantGroup, presetWebFonts } from 'unocss';
 import presetWind4 from '@unocss/preset-wind4';
 import presetIcons from '@unocss/preset-icons';
 
@@ -15,6 +15,21 @@ export default defineConfig({
       extraProperties: {
         display: 'inline-block',
         'vertical-align': 'middle',
+      },
+    }),
+    presetWebFonts({
+      provider: 'google',
+      fonts: {
+        sans: [
+          {
+            name: 'Noto Sans SC',
+            weights: ['100', '300', '400', '500', '700', '900'],
+          },
+          {
+            name: 'sans-serif',
+            provider: 'none', // 兜底字体不走网络请求
+          },
+        ],
       },
     }),
   ],
