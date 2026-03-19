@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createI18n } from 'vue-i18n';
 import { useStorage } from '@vueuse/core';
-// --- 1. 引入 dayjs 相关依赖 ---
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import 'dayjs/locale/en';
@@ -51,7 +50,6 @@ const getLocaleMessages = (modules: Record<string, any>, langPath: string) => {
 };
 
 // 2. 使用 import.meta.glob 批量导入
-// 此处保持 MessageRecord 类型，它是 Record<string, any>，不会触发深层推导
 const zhModules = import.meta.glob<MessageRecord>('./lang/zh-CN/**/*.ts', { eager: true });
 const enModules = import.meta.glob<MessageRecord>('./lang/en/**/*.ts', { eager: true });
 
@@ -77,8 +75,6 @@ watch(savedLocale, (val) => {
 });
 
 // 5. 创建 i18n 实例
-// 【关键修改】：将 i18n 实例本身或其配置项进行类型降级（断言为 any）
-// 这能阻止 vue-i18n 尝试去解析 messages 里的每一个嵌套 key
 const i18n = createI18n({
   legacy: false,
   locale: savedLocale.value,
@@ -87,5 +83,4 @@ const i18n = createI18n({
   globalInjection: true,
 });
 
-// 【关键修改】：导出时也使用 any 包装，防止在 router 或组件中使用 i18n.global.t 时报错
 export default i18n as any;
