@@ -1,22 +1,15 @@
-import {
-  defineConfig,
-  presetAttributify,
-  presetIcons,
-  presetMini,
-  transformerDirectives,
-  transformerVariantGroup,
-} from 'unocss';
+import { defineConfig, transformerVariantGroup } from 'unocss';
 import presetWind4 from '@unocss/preset-wind4';
+import presetIcons from '@unocss/preset-icons';
 
 export default defineConfig({
   // 1. 预设配置
   presets: [
-    presetMini(),
-    presetWind4(),
-    presetAttributify(),
+    presetWind4({
+      reset: true,
+    }),
     presetIcons({
-      // 优化点：不要使用 /browser。在 Vite 项目中，直接利用构建时加载更高效
-      scale: 1.2,
+      scale: 1,
       warn: true,
       prefix: 'i-',
       extraProperties: {
@@ -28,7 +21,6 @@ export default defineConfig({
 
   // 3. 转换器配置
   transformers: [
-    transformerDirectives(), // 支持 @apply
     transformerVariantGroup(), // 支持 hover:(bg-gray-100 text-red)
   ],
 

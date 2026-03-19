@@ -32,14 +32,7 @@ export default defineConfig(({ mode }) => {
         }),
 
       AutoImport({
-        imports: [
-          'vue',
-          'vue-router',
-          'pinia',
-          'vue-i18n',
-          '@vueuse/core',
-          { 'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar'] },
-        ],
+        imports: ['vue', 'vue-router', 'pinia', 'vue-i18n', '@vueuse/core'],
         dts: 'src/types/auto-imports.d.ts',
         dirs: ['src/composables', 'src/store'],
       }),
@@ -68,7 +61,7 @@ export default defineConfig(({ mode }) => {
       Icons({
         autoInstall: true,
         compiler: 'vue3',
-        scale: 1.2, // 稍微放大图标，视觉更佳
+        scale: 1, // 稍微放大图标，视觉更佳
       }),
       UnoCSS(),
     ].filter(Boolean),
@@ -130,7 +123,7 @@ export default defineConfig(({ mode }) => {
 
     // 优化 6: 预构建排除不需要预编译的大型库，或者显式指定
     optimizeDeps: {
-      include: ['vue', 'vue-router', 'pinia', 'naive-ui', 'vue-i18n', '@vueuse/core', 'axios'],
+      include: ['vue', 'vue-router', 'pinia', 'vue-i18n', '@vueuse/core', 'axios'],
       exclude: ['gsap'], // gsap 比较大且是 ESM，可以考虑排除在预构建之外
     },
   };
