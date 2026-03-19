@@ -1,10 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&display=swap');
-
 html,
 body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  font-family: 'Noto Sans SC', sans-serif;
+  /* 增加系统级后备字体，防止 Noto Sans 加载失败时布局错乱 */
+  font-family:
+    'Noto Sans SC',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+
+  /* 优化文字渲染 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 14px;
 }
