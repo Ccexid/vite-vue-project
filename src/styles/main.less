@@ -3,8 +3,6 @@ html,
 body {
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
   /* 增加系统级后备字体，防止 Noto Sans 加载失败时布局错乱 */
   font-family:
     'Noto Sans SC',
@@ -24,4 +22,11 @@ body {
   * {
     box-sizing: border-box;
   }
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
 }
