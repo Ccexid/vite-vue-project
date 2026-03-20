@@ -4,12 +4,10 @@
     <template v-if="Component">
       <Transition name="out-in">
         <KeepAlive>
-          <Suspense>
-            <Component
-              :key="route.fullPath"
-              :is="Component"
-            />
-          </Suspense>
+          <Component
+            :key="route.fullPath"
+            :is="Component"
+          />
         </KeepAlive>
       </Transition>
     </template>
