@@ -15,16 +15,19 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     redirect: '/home',
-  },
-  {
-    path: '/home',
-    component: () => import('@/pages/home/page.vue'),
-    name: 'home',
-  },
-  {
-    path: '/about',
-    component: () => import('@/pages/about/page.vue'),
-    name: 'about',
+    component: () => import('@/layout/index.vue'),
+    children: [
+      {
+        path: '/home',
+        component: () => import('@/pages/home/page.vue'),
+        name: 'homePage',
+      },
+      {
+        path: '/about',
+        component: () => import('@/pages/about/page.vue'),
+        name: 'aboutPage',
+      },
+    ],
   },
 ];
 

@@ -3,12 +3,10 @@
   <RouterView v-slot="{ Component, route }">
     <template v-if="Component">
       <Transition name="out-in">
-        <KeepAlive>
-          <Component
-            :key="route.fullPath"
-            :is="Component"
-          />
-        </KeepAlive>
+        <Component
+          :key="route.fullPath"
+          :is="Component"
+        />
       </Transition>
     </template>
   </RouterView>
