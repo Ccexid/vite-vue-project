@@ -7,6 +7,8 @@ import {
   type RouteRecordRaw,
 } from 'vue-router';
 import qs from 'qs';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 
 // 路由配置数组，用于存储应用的所有路由规则
 const routes: RouteRecordRaw[] = [
@@ -70,6 +72,18 @@ const router = createRouter({
   },
   // 滚动行为配置，切换路由时自动滚动到页面顶部并启用平滑滚动
   scrollBehavior: () => ({ top: 0, smooth: true }),
+});
+
+// 路由守卫：在每次路由切换前触发
+router.beforeEach(() => {
+  // 开始进度条动画
+  NProgress.start();
+});
+
+// 路由守卫：在每次路由切换后触发
+router.afterEach(() => {
+  // 完成进度条动画
+  NProgress.done();
 });
 
 // 导出路由实例供应用使用

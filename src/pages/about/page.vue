@@ -5,4 +5,10 @@
 </script>
 <template>
   <div>About</div>
+  <RouterLink
+    to="/"
+    :replace="true"
+  >
+    Home
+  </RouterLink>
 </template>

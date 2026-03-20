@@ -5,4 +5,5 @@
 </script>
 <template>
   <div>Home</div>
+  <RouterLink to="/about">About</RouterLink>
 </template>
